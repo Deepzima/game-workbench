@@ -1,0 +1,58 @@
+{
+  "algorithm": "sha256",
+  "created_at": "2026-09-21T16:12:54.830Z",
+  "files": [
+    {
+      "path": "docs/task-contract.md",
+      "sha256": "35300e3e8c076e15105d8b03f2b27de9602eddd883f726d21e8ee91235d26057"
+    },
+    {
+      "path": "schemas/task.schema.json",
+      "sha256": "8fec427097dd22dcfb227f52f953fd7ad090b91d63f541c718c41c9434130870"
+    },
+    {
+      "path": "schemas/handoff.schema.json",
+      "sha256": "0daa0b9e72771a3ebac93a7fc34e1bb6e79351586a4e622108b1580ae8850111"
+    },
+    {
+      "path": "templates/task/task.json",
+      "sha256": "df4da32311b3cc48240ee79fea47ec67a1b8f80cd1643866c94694e239a0c005"
+    },
+    {
+      "path": "templates/task/handoff.json",
+      "sha256": "66fe9801570af63f8f834d5645ccef06421f8f22a9c90daf2f39670df81de0e3"
+    },
+    {
+      "path": "skills/task-handoff/SKILL.md",
+      "sha256": "3f7876217bface04f11273cea11e2b5d470463853c72b9804da5a31d8f991d49"
+    },
+    {
+      "path": "agents/coordinator.md",
+      "sha256": "a54d31e1468fad9a75e4c917292ae390081c90dd1e558d18d13800cfb22bc683"
+    },
+    {
+      "path": "agents/independent-reviewer.md",
+      "sha256": "0dd12df717f247b31e612dcbe5b9e8f4e9fd9c8edf54cca4ef6a172031df78fe"
+    },
+    {
+      "path": ".github/agents/games-coordinator.agent.md",
+      "sha256": "0ce98251bb86c9c37ac7212b3cf2876a005764b20d8365e885af0f119bb71dbc"
+    },
+    {
+      "path": ".github/agents/games-reviewer.agent.md",
+      "sha256": "7dcfc19a36e7d0765eec3921d111fb048036844bc25941b88ca2841f04f525b4"
+    },
+    {
+      "path": "hub.json",
+      "sha256": "cb9e081b45bd8a77149be9d982d4b21127a40ef5186018f713e8eca70596671d"
+    },
+    {
+      "path": "schemas/hub.schema.json",
+      "sha256": "048fe19a0ac4203c63dc9c6bba3966786dafc733d958ac4d87f4ee8f96df4901"
+    },
+    {
+      "path": "scripts/hub.mjs",
+      "sha256": "75246b6ebd24e60ac7e7a1f60c6a0b5fd42843ac5745df0a2b4885e4f0ab8c82"
+    }
+  ]
+}

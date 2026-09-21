@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Games project handoff v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "project_id", "from_role", "to_role", "objective", "snapshot", "inputs", "completed", "evidence", "open_items", "next_action", "write_scope", "memory_refs"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "task_id": { "$ref": "#/definitions/id" },
+    "project_id": { "$ref": "#/definitions/id" },
+    "from_role": { "$ref": "#/definitions/id" },
+    "to_role": { "$ref": "#/definitions/id" },
+    "objective": { "$ref": "#/definitions/text" },
+    "snapshot": { "$ref": "#/definitions/text" },
+    "inputs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/definitions/text" } },
+    "completed": { "$ref": "#/definitions/texts" },
+    "evidence": { "$ref": "#/definitions/texts" },
+    "open_items": { "$ref": "#/definitions/texts" },
+    "next_action": { "$ref": "#/definitions/text" },
+    "write_scope": { "$ref": "#/definitions/texts" },
+    "memory_refs": { "$ref": "#/definitions/texts" }
+  },
+  "definitions": {
+    "id": { "type": "string", "maxLength": 64, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "texts": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/definitions/text" } }
+  }
+}

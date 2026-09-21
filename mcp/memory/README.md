@@ -1,0 +1,155 @@
+# games-memory v1
+
+Memoria condivisa basata su note Markdown e un indice locale SQLite FTS5.
+Il codice è distribuito insieme al hub. Richiede Node `22.23.2` o successivo;
+`mise.toml` fissa la versione usata dal progetto. Si usa `node:sqlite`, senza
+addon da compilare: su Node 22 l'API emette un avviso sperimentale su stderr.
+
+## Preparazione da un nuovo checkout
+
+Installare mise, clonare il hub, entrare nella sua directory ed esaminare la
+configurazione prima di accordarle fiducia:
+
+```sh
+mise trust
+mise install
+mise run hub:setup
+mise run memory:index
+mise run memory:status
+mise run memory:search -- --query "memoria"
+```
+
+`hub:setup` esegue `npm ci` dal lockfile, senza lifecycle script, e genera
+tre frammenti di configurazione in `.games/local/`. Il setup parte anche
+senza `node_modules` e non richiede chiavi API. Le dipendenze richiedono rete
+al primo download; il server avviato non installa pacchetti, non reindicizza
+e non usa un servizio remoto. `.env` serve soltanto alle integrazioni opzionali.
+
+Per registrare il server nel workspace VS Code del hub:
+
+```sh
+mise run hub:sync -- --client vscode --apply
+```
+
+L'adattatore usa `${workspaceFolder}` per risolvere questo checkout. Il
+generatore aggiunge soltanto `games-memory`, preserva gli altri server e
+rifiuta di sovrascrivere un'entry differente non gestita. Le configurazioni
+generate sono dati locali; il setup non azzera note, indici o login.
+La directory `.games/local/` riceve un proprio `.gitignore`, così i
+frammenti rimangono esclusi anche nei checkout esterni. Eventuali file
+già tracciati da Git richiedono una gestione esplicita prima di rigenerarli.
+
+Gli adattatori Claude e Codex si generano con `--client claude` e
+`--client codex`. Usano percorsi assoluti locali perché non assumono
+l'espansione delle variabili VS Code. Per applicarli con `--apply`, il file
+di destinazione deve essere ignorato da Git e non già tracciato; la verifica
+richiede Git. Senza `--apply` i frammenti restano consultabili in
+`.games/local/`. Il generatore rifiuta una doppia registrazione di
+`games-memory` in `.mcp.json` e `.vscode/mcp.json` dello stesso checkout.
+
+Installazione, registrazione e uso sono verifiche distinte. Il client può
+richiedere fiducia nel server o il riavvio della sessione per aggiornare gli
+strumenti. Gli account dei modelli restano gestiti da ciascun utente.
+
+## Aggiungere una memoria
+
+Ogni root ha un manifest `memory/sources.json`:
+
+```json
+{
+  "schema_version": 1,
+  "documents": ["memory/decision.md"]
+}
+```
+
+Sono indicizzate soltanto le note elencate, senza scansioni ricorsive di
+`projects/`. Una nota richiede il frontmatter seguente:
+
+```markdown
+---
+id: movement-timestep
+title: Passo della simulazione
+scope: project
+status: verified
+updated: 2026-09-21
+author: Nome del responsabile
+sources:
+  - docs/simulation.md
+---
+
+Descrizione della decisione, contesto e limiti. La fonte resta autorevole.
+```
+
+`scope` è `hub` nelle note comuni, `project` o `task` nelle note del gioco.
+`status` è `proposed`, `verified` o `superseded`; la data è `YYYY-MM-DD`.
+Ogni fonte deve esistere nello stesso checkout. Il server restituisce anche
+gli hash delle note e delle fonti. Non inserire segreti nei documenti
+indicizzati. I template iniziali sono in `templates/memory/`.
+
+Dopo una modifica, il responsabile rilegge la nota e le fonti, corregge
+eventuali affermazioni superate e aggiorna l'indice. `ready` significa che
+l'indice corrisponde ai file correnti: non certifica la verità del testo e
+non trasforma una proposta in decisione verificata. Lo stato editoriale
+della nota viene mantenuto esplicitamente da chi la modifica.
+
+```sh
+mise run memory:index
+mise run memory:read -- --scope hub --path memory/decisions/memory-model.md
+```
+
+## Progetti e worktree esterni
+
+Copiare il manifest vuoto di `templates/memory/sources.json` nel progetto,
+aggiungere note e inserire `.games/cache/` e `.games/local/` nel suo
+`.gitignore`. I progetti hanno un indice distinto dal hub; una root deve
+essere selezionata esplicitamente:
+
+```sh
+mise run memory:index -- --project-root "/percorso/al gioco"
+mise run memory:search -- --project-root "/percorso/al gioco" --scope project --query "movimento"
+mise run hub:sync -- --client vscode --project-root "/percorso/al gioco"
+```
+
+Il primo comando aggiorna hub e progetto; `--scope project` limita anche
+l'indicizzazione al solo gioco. Il terzo prepara un adattatore locale nel
+checkout selezionato. In questo caso contiene il percorso del hub e vale
+la regola delle configurazioni locali ignorate da Git prima di `--apply`.
+Non si presume l'eredità delle configurazioni fra repository separati.
+
+## Strumenti MCP e validità
+
+| Strumento | Input | Risultato |
+|---|---|---|
+| `memory_status` | `scope`: all/hub/project, predefinito all | Stato e motivi di invalidazione per ciascun indice |
+| `memory_search` | `query`, `scope`, `limit` 1–50 | Note correnti, estratti, metadati, percorsi e hash |
+| `memory_read` | `scope`: hub/project, `path` nel manifest | Nota attuale dal filesystem, anche con cache assente |
+
+Ogni risultato ha `state`: `ready`, `missing` o `stale`. Un indice obsoleto
+viene omesso dalla ricerca e indica i file da rileggere; un altro scope
+ancora valido può fornire risultati. Gli errori di input sono errori MCP,
+non risultati vuoti. CLI: uscita 0 per `ready`, 1 per cache assente/obsoleta
+o errore, con dettagli JSON quando disponibili.
+
+I tre strumenti sono di sola lettura e non creano file o cartelle. Solo
+`memory:index` scrive `.games/cache/memory.sqlite`, con transazione e attesa
+massima sul lock di cinque secondi. La v1 usa journal DELETE per evitare
+che letture producano sidecar WAL/SHM. La transazione riguarda un indice;
+hub e progetto vengono aggiornati separatamente.
+L'indicizzatore crea anche `.games/cache/.gitignore` per escludere i dati
+derivati nei nuovi checkout. Come ogni regola Git, non rimuove dall'indice
+file che qualcuno abbia già aggiunto forzatamente al repository.
+
+Le note recuperate sono dati di contesto: non sostituiscono istruzioni,
+permessi o specifiche. La memoria non include automaticamente cronologie
+delle chat, non sincronizza database fra macchine e non attiva hook.
+
+## Verifiche e portabilità
+
+`mise run hub:test` comprende test di manifest, metadati, scope, cache
+obsoleta, transazioni, percorsi, adattatori e chiamate reali dei tre strumenti
+MCP tramite stdio. I test usano directory temporanee con spazi e checkout
+separati; non dipendono dai giochi o da credenziali.
+
+La piattaforma verificata in questa milestone è macOS arm64. Linux e
+Windows richiedono ancora esecuzioni su host reali prima di dichiarare il
+supporto. Il launcher della finestra VS Code rimane specifico macOS.

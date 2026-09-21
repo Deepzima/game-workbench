@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Games project task v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "project_id", "role", "status", "objective", "snapshot", "inputs", "write_scope", "acceptance", "artifacts", "checks", "next_action"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "task_id": { "$ref": "#/definitions/id" },
+    "project_id": { "$ref": "#/definitions/id" },
+    "role": { "$ref": "#/definitions/id" },
+    "status": { "enum": ["planned", "in_progress", "blocked", "in_review", "done"] },
+    "objective": { "$ref": "#/definitions/text" },
+    "snapshot": { "$ref": "#/definitions/text" },
+    "inputs": { "$ref": "#/definitions/texts" },
+    "write_scope": { "$ref": "#/definitions/texts" },
+    "acceptance": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/definitions/text" } },
+    "artifacts": { "$ref": "#/definitions/texts" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "status", "evidence"],
+        "properties": {
+          "name": { "$ref": "#/definitions/text" },
+          "status": { "enum": ["passed", "failed", "not_run"] },
+          "evidence": { "$ref": "#/definitions/texts" }
+        },
+        "allOf": [{
+          "if": { "properties": { "status": { "const": "passed" } }, "required": ["status"] },
+          "then": { "properties": { "evidence": { "type": "array", "minItems": 1 } } }
+        }]
+      }
+    },
+    "next_action": { "$ref": "#/definitions/text" }
+  },
+  "allOf": [{
+    "if": { "properties": { "status": { "const": "done" } }, "required": ["status"] },
+    "then": {
+      "properties": {
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "object", "properties": { "status": { "const": "passed" } } }
+        }
+      }
+    }
+  }],
+  "definitions": {
+    "id": { "type": "string", "maxLength": 64, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "texts": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/definitions/text" } }
+  }
+}

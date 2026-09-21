@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "meshy": {
+      "command": "npx",
+      "args": ["-y", "@meshy-ai/meshy-mcp-server"],
+      "env": {
+        "MESHY_API_KEY": "${MESHY_API_KEY}"
+      }
+    },
+    "higgsfield": {
+      "type": "http",
+      "url": "https://mcp.higgsfield.ai/mcp"
+    },
+    "unity": {
+      "command": "uvx",
+      "args": ["--from", "mcpforunityserver", "mcp-for-unity", "--transport", "stdio"]
+    },
+    "unreal": {
+      "command": "npx",
+      "args": ["-y", "unreal-engine-mcp-server"],
+      "env": {
+        "UE_PROJECT_PATH": "${UE_PROJECT_PATH:-}"
+      }
+    }
+  }
+}

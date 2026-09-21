@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "documents": [
+    "memory/decisions/workspace-scope.md",
+    "memory/decisions/memory-model.md"
+  ]
+}

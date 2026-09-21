@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "task_id": "coordinator-reviewer",
+  "project_id": "games-hub",
+  "from_role": "coordinator",
+  "to_role": "independent-reviewer",
+  "objective": "Verificare in sola lettura coerenza del contratto task/handoff e correttezza dei due adattatori VS Code del hub.",
+  "snapshot": "docs/verification/coordinator-reviewer/snapshot.json (SHA-256 per file; verificare prima e dopo la review)",
+  "inputs": [
+    "docs/verification/coordinator-reviewer/task.json",
+    "docs/verification/coordinator-reviewer/README.md",
+    "docs/task-contract.md",
+    "schemas/task.schema.json",
+    "schemas/handoff.schema.json",
+    "templates/task/task.json",
+    "templates/task/handoff.json",
+    "skills/task-handoff/SKILL.md",
+    "agents/coordinator.md",
+    "agents/independent-reviewer.md",
+    ".github/agents/games-coordinator.agent.md",
+    ".github/agents/games-reviewer.agent.md",
+    "hub.json",
+    "schemas/hub.schema.json",
+    "scripts/hub.mjs"
+  ],
+  "completed": [
+    "Definizioni comuni e contratti disponibili.",
+    "Adattatore games-reviewer creato e collegamento dal coordinatore predisposto."
+  ],
+  "evidence": [
+    "docs/verification/coordinator-reviewer/snapshot.json"
+  ],
+  "open_items": [
+    "Review indipendente da eseguire.",
+    "Delega nativa in VS Code non ancora verificata."
+  ],
+  "next_action": "Root /Users/deepzima/games. Leggere task e README, verificare gli SHA-256 e riportare rilievi concreti con file/linea, controlli e limiti. Restituire il rapporto al coordinatore senza salvarlo.",
+  "write_scope": [],
+  "memory_refs": []
+}

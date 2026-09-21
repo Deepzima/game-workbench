@@ -1,0 +1,105 @@
+{
+  "version": "2.0.0",
+  "inputs": [
+    {
+      "id": "prompt",
+      "type": "promptString",
+      "description": "Task for the agent"
+    },
+    {
+      "id": "claudeAgent",
+      "type": "pickString",
+      "description": "Claude agent",
+      "options": [
+        "arch-ecs",
+        "arch-netcode",
+        "asset-higgsfield",
+        "asset-meshy",
+        "asset-blender",
+        "env-unity",
+        "env-unreal",
+        "env-bukkit"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "label": "Agent: Claude (orchestrator)",
+      "type": "process",
+      "command": "mise",
+      "args": [
+        "exec",
+        "--",
+        "claude",
+        "${input:prompt}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Agent: Claude (pick agent)",
+      "type": "process",
+      "command": "mise",
+      "args": [
+        "exec",
+        "--",
+        "claude",
+        "--agent",
+        "${input:claudeAgent}",
+        "${input:prompt}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Agent: Codex",
+      "type": "process",
+      "command": "mise",
+      "args": [
+        "exec",
+        "--",
+        "codex",
+        "--cd",
+        "${workspaceFolder}",
+        "${input:prompt}"
+      ],
+      "presentation": {
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Review: Codex on architecture docs",
+      "type": "process",
+      "command": "mise",
+      "args": [
+        "exec",
+        "--",
+        "codex",
+        "exec",
+        "-C",
+        "${workspaceFolder}",
+        "-s",
+        "read-only",
+        "Review every file in docs/architecture/. Report gaps, contradictions between ECS and netcode specs, and unstated budgets. Reply in Italian."
+      ],
+      "presentation": {
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

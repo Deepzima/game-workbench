@@ -1,0 +1,16 @@
+# Progetti di gioco: repo separati
+projects/
+game-workbench/
+
+# Segreti
+.env
+.env.*
+
+# Tool / OS
+node_modules/
+.DS_Store
+.claude/settings.local.json
+
+# Indici locali ricostruibili
+.games/cache/
+.games/local/

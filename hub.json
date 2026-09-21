@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "roles": [
+    { "id": "coordinator", "file": "agents/coordinator.md" },
+    { "id": "game-designer", "file": "agents/game-designer.md" },
+    { "id": "software-architect", "file": "agents/software-architect.md" },
+    { "id": "gameplay-programmer", "file": "agents/gameplay-programmer.md" },
+    { "id": "technical-artist", "file": "agents/technical-artist.md" },
+    { "id": "qa-engineer", "file": "agents/qa-engineer.md" },
+    { "id": "independent-reviewer", "file": "agents/independent-reviewer.md" }
+  ],
+  "skills": [
+    { "id": "task-handoff", "file": "skills/task-handoff/SKILL.md" }
+  ],
+  "contracts": {
+    "task": {
+      "schema": "schemas/task.schema.json",
+      "template": "templates/task/task.json"
+    },
+    "handoff": {
+      "schema": "schemas/handoff.schema.json",
+      "template": "templates/task/handoff.json"
+    }
+  }
+}

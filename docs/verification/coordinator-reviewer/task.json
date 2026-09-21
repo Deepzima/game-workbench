@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "task_id": "coordinator-reviewer",
+  "project_id": "games-hub",
+  "role": "coordinator",
+  "status": "done",
+  "objective": "Validare il primo passaggio documentato da coordinatore a revisore indipendente sul contratto e sugli adattatori del hub.",
+  "snapshot": "docs/verification/coordinator-reviewer/snapshot.json (SHA-256 per file; verificare prima e dopo la review)",
+  "inputs": [
+    "docs/task-contract.md",
+    "schemas/task.schema.json",
+    "schemas/handoff.schema.json",
+    "templates/task/task.json",
+    "templates/task/handoff.json",
+    "skills/task-handoff/SKILL.md",
+    "agents/coordinator.md",
+    "agents/independent-reviewer.md",
+    ".github/agents/games-coordinator.agent.md",
+    ".github/agents/games-reviewer.agent.md",
+    "hub.json",
+    "schemas/hub.schema.json",
+    "scripts/hub.mjs"
+  ],
+  "write_scope": [
+    "docs/verification/coordinator-reviewer"
+  ],
+  "acceptance": [
+    "Il pacchetto task/handoff rispetta gli schemi e identifica root, ruoli, input e snapshot.",
+    "Un revisore con contesto separato verifica gli hash, esamina contratto e adattatori e restituisce un rapporto senza modificare gli input.",
+    "Il coordinatore verifica di nuovo lo snapshot e registra rapporto, rilievi e decisione di integrazione.",
+    "Il rapporto distingue la prova tramite subagenti Codex dalla delega nativa VS Code ancora da verificare."
+  ],
+  "artifacts": [
+    "docs/verification/coordinator-reviewer/handoff.json",
+    "docs/verification/coordinator-reviewer/snapshot.json",
+    "docs/verification/coordinator-reviewer/review.md",
+    "docs/verification/coordinator-reviewer/result.md"
+  ],
+  "checks": [
+    {
+      "name": "Validazione strutturale del task e del pacchetto",
+      "status": "passed",
+      "evidence": [
+        "docs/verification/coordinator-reviewer/result.md: validazione del pacchetto prima della delega e dopo il ritorno"
+      ]
+    },
+    {
+      "name": "Review indipendente in contesto separato",
+      "status": "passed",
+      "evidence": [
+        "docs/verification/coordinator-reviewer/review.md"
+      ]
+    },
+    {
+      "name": "Integrità degli input dopo la review",
+      "status": "passed",
+      "evidence": [
+        "docs/verification/coordinator-reviewer/snapshot.json",
+        "docs/verification/coordinator-reviewer/result.md: 13 SHA-256 corrispondenti"
+      ]
+    },
+    {
+      "name": "Integrazione e distinzione fra esecutori",
+      "status": "passed",
+      "evidence": [
+        "docs/verification/coordinator-reviewer/result.md"
+      ]
+    }
+  ],
+  "next_action": "Eseguire la prova distinta di delega nativa VS Code descritta nel README della verifica."
+}

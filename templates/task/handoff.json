@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "task_id": "example-task",
+  "project_id": "example-game",
+  "from_role": "gameplay-programmer",
+  "to_role": "independent-reviewer",
+  "objective": "Sostituire con l'obiettivo preciso della revisione.",
+  "snapshot": "Sostituire con la versione effettiva degli artefatti da esaminare.",
+  "inputs": ["tasks/example-task/task.json"],
+  "completed": [],
+  "evidence": [],
+  "open_items": [],
+  "next_action": "Verificare gli input e riportare rilievi con evidenze.",
+  "write_scope": [],
+  "memory_refs": []
+}

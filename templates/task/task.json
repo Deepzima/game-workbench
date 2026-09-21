@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "task_id": "example-task",
+  "project_id": "example-game",
+  "role": "gameplay-programmer",
+  "status": "planned",
+  "objective": "Sostituire con il risultato osservabile richiesto dal task.",
+  "snapshot": "Da acquisire prima del lavoro: revisione e diff oppure hash degli input.",
+  "inputs": [],
+  "write_scope": [],
+  "acceptance": ["Sostituire con un criterio verificabile del risultato."],
+  "artifacts": [],
+  "checks": [],
+  "next_action": "Completare il brief e identificare gli input prima di iniziare."
+}

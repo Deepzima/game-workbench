@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(./**)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(codex exec -C * -s read-only *)"
+    ],
+    "deny": [
+      "Read(./**/.env)",
+      "Read(./**/.env.*)"
+    ]
+  }
+}

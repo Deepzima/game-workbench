@@ -1,0 +1,102 @@
+# Toolchain ed env del hub games.
+# Uso: `mise install` per allineare i tool, `mise tasks` per vedere i comandi.
+# I progetti in projects/ hanno il proprio mise.toml.
+
+[tools]
+# npx per i server MCP Node (meshy, unreal)
+node = "22.23.2"
+# uvx per i server MCP Python (unity, blender)
+uv = "0.12.17"
+
+[env]
+# Segreti (MESHY_API_KEY, UE_PROJECT_PATH, …) in .env, non versionato.
+# Modello in env.example.
+_.file = { path = ".env", redact = true }
+
+[tasks.claude]
+description = "Claude Code nel hub (orchestratore, agenti in .claude/agents)"
+run = "claude"
+raw = true
+
+[tasks.codex]
+description = "Codex CLI nel hub (legge AGENTS.md)"
+run = "codex --cd {{config_root}}"
+raw = true
+
+[tasks.mcp]
+description = "Stato dei server MCP visti da Claude"
+run = "claude mcp list"
+
+[tasks.agents]
+description = "Finestra Agents dedicata a games, separata dal VS Code con GitHub"
+run = "zsh -f scripts/vscode-agents.zsh --agents"
+raw = true
+
+[tasks.agents-editor]
+description = "Editor VS Code nella stessa istanza dedicata a games"
+run = "zsh -f scripts/vscode-agents.zsh --editor"
+raw = true
+
+[tasks.claude-token]
+description = "Login nel browser per generare il token OAuth del proprio abbonamento Claude"
+run = "claude setup-token"
+raw = true
+
+[tasks.agents-claude]
+description = "Avvia l'istanza Games con un token Claude inserito senza salvarlo"
+run = "zsh -f scripts/vscode-agents.zsh --claude"
+raw = true
+
+[tasks.agents-check]
+description = "Mostra percorso e stato dell'istanza VS Code dedicata"
+run = "zsh -f scripts/vscode-agents.zsh --check"
+
+[tasks."hub:check"]
+description = "Valida catalogo, ruoli, skill e formati dei task del hub"
+dir = "{{config_root}}"
+run = "node scripts/hub.mjs check"
+
+[tasks."hub:doctor"]
+description = "Controlla prerequisiti locali senza avviare harness o MCP"
+dir = "{{config_root}}"
+run = "node scripts/hub.mjs doctor"
+
+[tasks."hub:test"]
+description = "Esegue i test dei controlli del hub"
+dir = "{{config_root}}"
+run = "node --test tests/*.test.mjs"
+
+[tasks."hub:snapshot"]
+description = "Verifica gli hash della prova coordinatore-revisore"
+dir = "{{config_root}}"
+run = "node scripts/check-snapshot.mjs docs/verification/coordinator-reviewer/snapshot.json"
+
+[tasks."hub:setup"]
+description = "Installa dipendenze bloccate e prepara gli adattatori MCP memoria"
+dir = "{{config_root}}"
+run = "node scripts/setup.mjs"
+
+[tasks."hub:sync"]
+description = "Genera gli adattatori MCP memoria; --client e --apply per registrarne uno"
+dir = "{{config_root}}"
+run = "node scripts/memory-adapters.mjs"
+
+[tasks."memory:index"]
+description = "Ricostruisce l'indice SQLite delle note ammesse nel manifest"
+dir = "{{config_root}}"
+run = "node mcp/memory/cli.mjs index"
+
+[tasks."memory:status"]
+description = "Controlla validità e disponibilità della memoria senza scrivere"
+dir = "{{config_root}}"
+run = "node mcp/memory/cli.mjs status"
+
+[tasks."memory:search"]
+description = "Cerca nella memoria corrente: --query TESTO [--scope hub|project|all]"
+dir = "{{config_root}}"
+run = "node mcp/memory/cli.mjs search"
+
+[tasks."memory:read"]
+description = "Legge una nota ammessa: --scope hub|project --path memory/nota.md"
+dir = "{{config_root}}"
+run = "node mcp/memory/cli.mjs read"

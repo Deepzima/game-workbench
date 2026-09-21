@@ -1,0 +1,48 @@
+{
+  "servers": {
+    "meshy": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@meshy-ai/meshy-mcp-server"],
+      "envFile": "${workspaceFolder}/.env"
+    },
+    "higgsfield": {
+      "type": "http",
+      "url": "https://mcp.higgsfield.ai/mcp"
+    },
+    "blender": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["mcp-for-blender"]
+    },
+    "unity": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--from", "mcpforunityserver", "mcp-for-unity", "--transport", "stdio"]
+    },
+    "unreal": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "unreal-engine-mcp-server"],
+      "envFile": "${workspaceFolder}/.env"
+    },
+    "games-memory": {
+      "type": "stdio",
+      "command": "mise",
+      "args": [
+        "-C",
+        "${workspaceFolder}",
+        "exec",
+        "--no-deps",
+        "--",
+        "node",
+        "mcp/memory/server.mjs",
+        "--hub-root",
+        "${workspaceFolder}"
+      ],
+      "env": {
+        "MISE_AUTO_INSTALL": "false"
+      }
+    }
+  }
+}
