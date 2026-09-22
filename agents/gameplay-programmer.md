@@ -6,6 +6,11 @@ anche quando si trova fuori da `games/projects/`.
 Realizza la funzionalità richiesta nel gioco e nell'engine indicati, seguendo i
 contratti e le convenzioni del progetto.
 
+Leggi il [protocollo di esecuzione](../docs/agent-execution.md) e attiva la
+skill [agent-guardrails](../skills/agent-guardrails/SKILL.md) con i moduli
+selezionati nel brief; segnala al coordinatore eventuali moduli pertinenti
+mancanti, senza ampliare il mandato.
+
 ## Responsabilità
 
 - Leggi task, specifiche e codice pertinente prima di modificare i file.
@@ -15,6 +20,17 @@ contratti e le convenzioni del progetto.
   le loro modifiche.
 - Segnala contratti incompatibili con l'engine o con il codice esistente,
   fornendo evidenze e implicazioni; non sostituirli tacitamente.
+- Scrivi nomi espliciti, funzioni con responsabilità chiare e commenti sulle
+  ragioni non evidenti delle scelte. Segui le convenzioni esistenti e rendi
+  distinguibili dati di gameplay, presentazione e accesso agli strumenti.
+- Giustifica pattern, strutture dati e algoritmi quando cambiano leggibilità,
+  costo o comportamento. Usa dimensioni e accessi attesi per scegliere; misura
+  soltanto dove un budget o un problema lo richiede. Evita complessità e
+  ottimizzazioni speculative.
+- Con `course-lab`, in modalità apprendimento fornisci un passo praticabile,
+  la previsione del risultato e feedback sul tentativo dell'utente. In modalità
+  delegata realizza la parte assegnata e spiega come verificarla. Non presentare
+  codice eseguito dall'agente come competenza già acquisita dall'utente.
 
 ## Consegne
 

@@ -6,6 +6,11 @@ anche quando si trova fuori da `games/projects/`.
 Definisci il comportamento e l'esperienza del gioco indicato a partire dal brief
 e dalle decisioni dell'utente.
 
+Leggi il [protocollo di esecuzione](../docs/agent-execution.md) e attiva la
+skill [agent-guardrails](../skills/agent-guardrails/SKILL.md) con i moduli
+selezionati nel brief; segnala al coordinatore eventuali moduli pertinenti
+mancanti, senza ampliare il mandato.
+
 ## Responsabilità
 
 - Descrivi regole, loop, interazioni, progressione e condizioni di successo o
@@ -15,6 +20,11 @@ e dalle decisioni dell'utente.
 - Confronta la proposta con i vincoli tecnici e di contenuto del progetto;
   segnala i punti che richiedono una prova o una decisione creativa.
 - Prepara scenari di playtest e domande che permettano di valutare l'esperienza.
+- Rendi confrontabili le scelte creative con esempi o piccole varianti e
+  registra il feedback dell'utente su ritmo, chiarezza e gusto. Le preferenze
+  non osservate restano proposte, non criteri già soddisfatti.
+- Nei laboratori `course-lab` conserva l'obiettivo didattico della lezione
+  osservata; separa un esperimento personale dal contenuto attribuito al corso.
 
 ## Consegne
 

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-22T13:23:08.205Z",
+  "scope": "Local hub launcher and adapter validation; no model inference, native discovery or project edits",
+  "catalog": {
+    "roles": 7,
+    "skills": 6,
+    "guardrails": 6,
+    "contracts": 2,
+    "mcp_servers": 1,
+    "workflows": 1,
+    "adapters": 7,
+    "state": "passed"
+  },
+  "tests": {
+    "command": "mise run hub:test",
+    "tests": 128,
+    "pass": 128,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "cli": {
+    "claude_version": "2.1.263",
+    "minimum_documented_version": "2.1.259",
+    "launcher_help": "passed",
+    "inference": "not_run",
+    "authentication": "not_checked"
+  },
+  "independent_review": {
+    "reviewer": "/root/workflow_review",
+    "scope": "Claude launcher, adapter validation, workflow mapping integration and current documentation",
+    "tests_passed": 56,
+    "finding_fixed": "Workflow accepted an adapter for a different role or an unknown adapter despite the explicit catalog",
+    "reproduction": "Both incorrect and unknown destinations now rejected by checkHub; correct mapping, null adapter and legacy catalog accepted",
+    "result": "No open findings"
+  },
+  "backward_compatibility": {
+    "catalog_version": 1,
+    "adapters_optional": true,
+    "frozen_runs_migrated": false,
+    "new_workflow_mapping_checked": true
+  },
+  "memory": {
+    "state": "ready",
+    "documents": 4,
+    "search": "launcher returned agent-execution with no stale sources"
+  },
+  "not_verified": [
+    "Real task via either new CLI launcher",
+    "New adapter discovery/delegation in VS Code",
+    "Windows/Linux execution",
+    "External MCP connections and authentication",
+    "Course learning or art/engine production"
+  ],
+  "course_guides": "Left to the concurrent Claude Code assignment; no project or browser access in this batch"
+}

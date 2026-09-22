@@ -3,11 +3,15 @@
   "title": "Games hub catalog v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "roles", "skills", "contracts"],
+  "required": ["schema_version", "roles", "skills", "contracts", "mcp_servers"],
   "properties": {
     "schema_version": { "const": 1 },
     "roles": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/entry" } },
     "skills": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/entry" } },
+    "guardrails": { "type": "array", "items": { "$ref": "#/definitions/entry" } },
+    "workflows": { "type": "array", "items": { "$ref": "#/definitions/entry" } },
+    "adapters": { "type": "array", "maxItems": 64, "items": { "$ref": "#/definitions/adapter" } },
+    "mcp_servers": { "type": "array", "maxItems": 64, "items": { "$ref": "#/definitions/mcpServer" } },
     "contracts": {
       "type": "object",
       "additionalProperties": false,
@@ -19,6 +23,46 @@
     }
   },
   "definitions": {
+    "adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "client", "role", "file"],
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "client": { "const": "vscode" },
+        "role": { "type": "string", "maxLength": 64, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "file": { "type": "string", "minLength": 1 }
+      }
+    },
+    "mcpArgument": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 2048 },
+        {
+          "type": "object", "additionalProperties": false, "required": ["root"],
+          "properties": { "root": { "enum": ["hub", "project"] } }
+        }
+      ]
+    },
+    "mcpServer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "transport", "runtime", "entrypoint", "args"],
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "description": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "transport": { "const": "stdio" },
+        "runtime": { "const": "node" },
+        "entrypoint": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "args": { "type": "array", "maxItems": 64, "items": { "$ref": "#/definitions/mcpArgument" } },
+        "project_args": { "type": "array", "maxItems": 64, "items": { "$ref": "#/definitions/mcpArgument" } },
+        "env": {
+          "type": "object", "maxProperties": 32,
+          "propertyNames": { "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+          "properties": { "MISE_AUTO_INSTALL": { "const": "false" } },
+          "additionalProperties": { "type": "string", "maxLength": 2048 }
+        }
+      }
+    },
     "entry": {
       "type": "object",
       "additionalProperties": false,

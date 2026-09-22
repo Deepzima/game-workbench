@@ -82,5 +82,8 @@ node scripts/hub.mjs check --handoff /percorso/assoluto/allo/handoff.json
 
 Il doctor controlla prerequisiti e configurazioni leggibili; non avvia MCP,
 non esegue login e non prova l'inferenza. Il primo adattatore VS Code e il
-link alle skill sono descritti nella [guida operativa](vscode-agents.md#primo-ruolo-e-skill-condivisa);
-la memoria condivisa resta un passaggio successivo.
+link alle skill sono descritti nella [guida operativa](vscode-agents.md#primo-ruolo-e-skill-condivisa).
+La [memoria condivisa](../mcp/memory/README.md) è disponibile tramite il suo
+adattatore. Il [workflow game-feature](workflows.md) aggiunge un registro
+delle fasi nel progetto: il coordinatore mantiene anche `task.json`, senza
+confondere completamento della run e verifiche del prodotto.

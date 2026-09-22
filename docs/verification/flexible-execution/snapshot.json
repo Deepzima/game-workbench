@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-22T12:18:32.189023+00:00",
+  "algorithm": "sha256",
+  "purpose": "Optional executors, human checkpoints, guardrail catalog and course-lab procedures. Historical snapshots retained.",
+  "files": [
+    {
+      "path": ".github/agents/games-architect.agent.md",
+      "sha256": "e2eda42b2a4802ffe53e82817cc5524bbaa450e508e5b87b815f81b85a38eeaa"
+    },
+    {
+      "path": ".github/agents/games-coordinator.agent.md",
+      "sha256": "0e211c7d6a729b7094559fc7912bf6d9e52e8621e46babcdf886dfa0be8cef6b"
+    },
+    {
+      "path": ".github/agents/games-designer.agent.md",
+      "sha256": "a080f879b90368a57e5309fa8efa72d260ba3be567f2e934b1efc7b9ed423ce9"
+    },
+    {
+      "path": ".github/agents/games-graphics.agent.md",
+      "sha256": "657f761aa4a8ca90f215a1d91bc755486d4ded31b529265c7b67f9c70f4ee590"
+    },
+    {
+      "path": ".github/agents/games-programmer.agent.md",
+      "sha256": "a4591df092270319b151360a1bcea44f07a93fdd913500b91bd3efc72f303475"
+    },
+    {
+      "path": ".github/agents/games-qa.agent.md",
+      "sha256": "31b788d87c095cf0e85a1a562267a53bb461c2dd5c769161fdbebab64961c498"
+    },
+    {
+      "path": ".github/agents/games-reviewer.agent.md",
+      "sha256": "d2ac56c4af0f7032c0b2b5bd90ffff570b39ebe2ce10adbe775413a38e5f92a5"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "3b5735ee683e41e9ed32ba24dfdbf991eb54acd6fe5cc29dcabb2465bbbfa520"
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "4a68293acaffcba22b4ad5e662dbdc991d6367019144ffc120a1c6e7fe0871ab"
+    },
+    {
+      "path": "README.md",
+      "sha256": "6e6c39ac2eafb44afe9a8231221076457519618668dfa19023a0e7bbe5ffd897"
+    },
+    {
+      "path": "agents/coordinator.md",
+      "sha256": "9b08f6673630020fb3c23ce4c8630b77897eba63451c650185a25ae6ddcc65c1"
+    },
+    {
+      "path": "agents/game-designer.md",
+      "sha256": "ccbceec8a51ec2ff5cc7025618b909313d9b8d3ae53bd6ee7cc537b9f58b270d"
+    },
+    {
+      "path": "agents/gameplay-programmer.md",
+      "sha256": "0dfc92c6baec8a38bc2efac43f3c0e89da9655115ee2fcc99547efddd90aedf2"
+    },
+    {
+      "path": "agents/independent-reviewer.md",
+      "sha256": "66bf5a766dc0b0a18a98e12843160ee171b14ce6fa951b17ea7d18394fe87701"
+    },
+    {
+      "path": "agents/qa-engineer.md",
+      "sha256": "9475e4a76638d4bc815699d2a48da25ea8ee4ad968952259486c8d5d720faf7e"
+    },
+    {
+      "path": "agents/software-architect.md",
+      "sha256": "03b3847cfcc5e53f759064608de0d30f9e082f02df84831b3d17d9f172e0dcd6"
+    },
+    {
+      "path": "agents/technical-artist.md",
+      "sha256": "30fdb61e543799a0454d84f2fa977137cb1df3567dbe132b1626e3bedcdab9c2"
+    },
+    {
+      "path": "docs/agent-execution.md",
+      "sha256": "de1fcd70e2cf2ff9db38ba454f6b57ddedfb797553974037481aed1fe98869b2"
+    },
+    {
+      "path": "docs/course-lab.md",
+      "sha256": "c46c13516f7e4bfab4c24f0ea74aca5af5b6902aa37c747948628fedfb07ea0a"
+    },
+    {
+      "path": "docs/executors.md",
+      "sha256": "1adee71444e5806840abeadfa436d3cab06378346ce805a50bfc20535f01fe86"
+    },
+    {
+      "path": "docs/harness-game-development.md",
+      "sha256": "9481c1533db7860e69f2199ff5d3e8f41c690a6bf45dbb24ccec54ec3c3cc21f"
+    },
+    {
+      "path": "docs/pipelines/claude-higgsfield.md",
+      "sha256": "3779e9adaffd39667abc53987e97d6a5dcb7872f2b941ce0dce91c00b576fbac"
+    },
+    {
+      "path": "docs/pipelines/concept-to-unity.md",
+      "sha256": "87f73a36e38721452d9ff4eaac1f2bf924da5d9ca6a0bb3340dcc93e14fce556"
+    },
+    {
+      "path": "docs/task-contract.md",
+      "sha256": "6a7a551a60b06fbfd72423149cddc2013768c7272d503e93258d493c50de5df2"
+    },
+    {
+      "path": "docs/verification/flexible-execution/README.md",
+      "sha256": "4c23834d457ac4aab47d11de86a753be26add626840151bd4e006b9dbc2e674a"
+    },
+    {
+      "path": "docs/verification/flexible-execution/result.json",
+      "sha256": "9ea1cf8874c22adc58310f722dca0ca128b21eab1fcff597f0a805b3c275732f"
+    },
+    {
+      "path": "docs/verification/workflow-v1/README.md",
+      "sha256": "1eb49236008491c76f4729eb53db6b5c09753176daa7087c59688a6a0fc27eda"
+    },
+    {
+      "path": "docs/verification/workflow-v1/checks.json",
+      "sha256": "c77370527ce07c931606c49533fce23328bcc75fe0032d5087afca3ef69c4b22"
+    },
+    {
+      "path": "docs/verification/workflow-v1/result.json",
+      "sha256": "e0d267146581aa3836679b7aca1e4ef67e667ce62ec0c779d7ebd92522d0a30a"
+    },
+    {
+      "path": "docs/vscode-agents.md",
+      "sha256": "9b7f771e44f71c1393abebfe57788d058a9a0d1cb77979d6c9272d80133373a5"
+    },
+    {
+      "path": "docs/workflows.md",
+      "sha256": "0df52613a52628a33098e0a686d5e17eb98c307e81f1acb3bbe3f57a771c543a"
+    },
+    {
+      "path": "guardrails/asset-quality.md",
+      "sha256": "a8d87ee349893a19a049bea1add3d560cb8538e17ce430c55def6bc64ed72893"
+    },
+    {
+      "path": "guardrails/human-review.md",
+      "sha256": "0f9d799d4738c0a7ab1f65a7cc3b8d6639c031033e047a830acf9fcd0fc0fef2"
+    },
+    {
+      "path": "guardrails/learning-integrity.md",
+      "sha256": "c0f53309b1014c9ec075b370fc31b386f8cee09c0ff412056f1366130053ba79"
+    },
+    {
+      "path": "guardrails/netcode-performance.md",
+      "sha256": "b5cc4e2b6e4977ccebf2d63bb433b66e690863ef8b5ead69c63be65e5d4e2fd9"
+    },
+    {
+      "path": "guardrails/readable-code.md",
+      "sha256": "9706166f31ba547afeee43dad09adf3166842e0c0b55f4cc042b8f02db829731"
+    },
+    {
+      "path": "guardrails/workspace-scope.md",
+      "sha256": "a15da7cd471ac3cac329b47372b30f270c02f241d25f5c2d77124ce2570b5292"
+    },
+    {
+      "path": "hub.json",
+      "sha256": "8ad1b3ee593af1bedf95262a98a4ccf5b9628d082b27838964baa5ee2c6334a0"
+    },
+    {
+      "path": "mcp/memory/cli.mjs",
+      "sha256": "b2bbf158776687fd56dd5437a708311f2b18f85747684e76eff79c103bbde139"
+    },
+    {
+      "path": "mcp/memory/options.mjs",
+      "sha256": "7e5c3cd8bf254a20442639e50daba3cac559ccb9d603a1e16aace222725931f8"
+    },
+    {
+      "path": "mcp/memory/server.mjs",
+      "sha256": "7b42b382fa0d08930c11dea3167df7bc1204dd1863a7017166d364e373e918e9"
+    },
+    {
+      "path": "mcp/memory/store.mjs",
+      "sha256": "943ae0c1ea495077b28991735942b21e1b61f15da2f7ed8bf84c36fd383f3c0e"
+    },
+    {
+      "path": "memory/decisions/agent-execution.md",
+      "sha256": "7084b6271888cab80bc49135355d1c76b8cd83909c367fd4b85c16fa3f0ec4ae"
+    },
+    {
+      "path": "memory/decisions/workflow-model.md",
+      "sha256": "9e82596dc2fe78115f3260071f937ad118efac1706c3fcd5cfea853fd25e81b0"
+    },
+    {
+      "path": "memory/sources.json",
+      "sha256": "3328a82b0e22c8476df5b44d4c7bbfafada4cb51845a38bacd91241f76044285"
+    },
+    {
+      "path": "mise.toml",
+      "sha256": "c22eda94cc47d583b01da04741251fc63b1d883d29b4ff3c7f5bdda4099f86ee"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "9b857e2930c2dcbf6cb1b68990e480b2dcd394dbb86bf94e98c9d2758e718ad5"
+    },
+    {
+      "path": "package.json",
+      "sha256": "d4a9b75a66b004fc4a04e8831f1928baec5f65afaa8e112d5594483e1a19ef22"
+    },
+    {
+      "path": "schemas/handoff.schema.json",
+      "sha256": "0daa0b9e72771a3ebac93a7fc34e1bb6e79351586a4e622108b1580ae8850111"
+    },
+    {
+      "path": "schemas/hub.schema.json",
+      "sha256": "7221c7d806804689d373bb6bb09d8a6b4d1b3a72beb77e53bc146f8aaa81b757"
+    },
+    {
+      "path": "schemas/task.schema.json",
+      "sha256": "8fec427097dd22dcfb227f52f953fd7ad090b91d63f541c718c41c9434130870"
+    },
+    {
+      "path": "schemas/workflow.schema.json",
+      "sha256": "aaa77c01453b5364cc71c908ce82510785d6803467b7a750d0c7d5b73c00b6ea"
+    },
+    {
+      "path": "scripts/check-snapshot.mjs",
+      "sha256": "2f8316ff06010d4e8d588687db4068c929b0bd8030cede4965f5a2d2d88a58f6"
+    },
+    {
+      "path": "scripts/hub.mjs",
+      "sha256": "7d063a9df23a3d6a6bd06d3493a65948b3f9f10ea36256b91afd066a9454cbd6"
+    },
+    {
+      "path": "scripts/mcp-catalog.mjs",
+      "sha256": "35c50861659d2b7fc20143d391d3e4b15184aef6069aa41fa0e7f4fd1fdc4071"
+    },
+    {
+      "path": "scripts/memory-adapters.mjs",
+      "sha256": "2eae01456c1bdb643a92c5da60c933e58d63c3cd1ff74ae8574ceadf1f43b785"
+    },
+    {
+      "path": "scripts/opencode.mjs",
+      "sha256": "de6e7c0cbeb1e3911dd19bf124b6d60eedc033df30d5acde05a750e33d30fecf"
+    },
+    {
+      "path": "scripts/setup.mjs",
+      "sha256": "0aced68ea30817113e987d60356eae1e8df036b8728ceb105770b82ff9fbeb61"
+    },
+    {
+      "path": "scripts/workflow.mjs",
+      "sha256": "1ac484d44983b1d47cfb32470676d74f8f0c28a1af8c56a052e13e7e158afa91"
+    },
+    {
+      "path": "skills/agent-guardrails/SKILL.md",
+      "sha256": "485045091661ba7054d38d2cbb8c826cc48e8b5859742196e6853dfe7ceb6c9e"
+    },
+    {
+      "path": "skills/course-lab/SKILL.md",
+      "sha256": "4b7f93fa06871f3ff4122cc437ba1dd49a03e33e8a9ede32ff60346f044972a5"
+    },
+    {
+      "path": "skills/delegate-code/SKILL.md",
+      "sha256": "5aa82e16462644b753542c3e4c528e8580c9a616f349e5987e2c9306330fc941"
+    },
+    {
+      "path": "skills/game-feature/SKILL.md",
+      "sha256": "2e549611dd1b8bb1db67d501b033f9d920f17d72f23f48864641f7cf5c9036cf"
+    },
+    {
+      "path": "skills/local-art/SKILL.md",
+      "sha256": "e1cd90773a17ab541239c67b937758642723e53ed20bccf8536dd597571e986f"
+    },
+    {
+      "path": "skills/task-handoff/SKILL.md",
+      "sha256": "3f7876217bface04f11273cea11e2b5d470463853c72b9804da5a31d8f991d49"
+    },
+    {
+      "path": "templates/learning/lesson.md",
+      "sha256": "15ef79609decf3a9523d7996dfda0fcbd7891531b40474cbed389514aedb9f5d"
+    },
+    {
+      "path": "templates/task/handoff.json",
+      "sha256": "66fe9801570af63f8f834d5645ccef06421f8f22a9c90daf2f39670df81de0e3"
+    },
+    {
+      "path": "templates/task/task.json",
+      "sha256": "df4da32311b3cc48240ee79fea47ec67a1b8f80cd1643866c94694e239a0c005"
+    },
+    {
+      "path": "tests/hub.test.mjs",
+      "sha256": "392cafe258d27b4a576e224f6bc0444c9d32bf281a18ed7b19e8667ccc30424d"
+    },
+    {
+      "path": "tests/mcp-catalog.test.mjs",
+      "sha256": "fdafdbf5c3d8b7bb8d8c58c5bcedd272b470bd77b00d4eebc1d4fba6f485b1b1"
+    },
+    {
+      "path": "tests/memory-mcp.test.mjs",
+      "sha256": "d4508a1a127e0e0e32c958d3317d70134b53ecfa46a4303a6e6e743d8d39c17d"
+    },
+    {
+      "path": "tests/memory-setup.test.mjs",
+      "sha256": "8dee9f1765c4a09ed044a4c4d7d8e22d287c053de3fad65f702dca2b5b79dc5f"
+    },
+    {
+      "path": "tests/memory-store.test.mjs",
+      "sha256": "209960e721af0d2af4be05b97a13c98b18c9bbfacc1248276099ef6e25212af3"
+    },
+    {
+      "path": "tests/opencode.test.mjs",
+      "sha256": "5d8e8af2b5fdf651d3436e0b97c793bec5b598ccc3342ce951293358f3e104c8"
+    },
+    {
+      "path": "tests/snapshot.test.mjs",
+      "sha256": "93aec44381bf1bc27708578d7d75e0f750b34d057f71adb7cee0faa4e52fc083"
+    },
+    {
+      "path": "tests/workflow.test.mjs",
+      "sha256": "f6dd74045ba4094c0a9fb11a18bc05f4d6bc9a9493097fb17268efaf881ea1e7"
+    },
+    {
+      "path": "workflows/game-feature.json",
+      "sha256": "1680a39d156971184764b98d79eba6790ae057ea03ba9bdc12856cfdc4369f21"
+    }
+  ]
+}

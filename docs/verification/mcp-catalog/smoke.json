@@ -1,0 +1,58 @@
+{
+  "verified_at": "2026-09-21T23:36:13.843Z",
+  "platform": "darwin-arm64",
+  "node": "22.23.2",
+  "sessions": [
+    {
+      "configuration_format": "vscode",
+      "executor": "standalone MCP SDK client via generated launch arguments",
+      "tools": [
+        "memory_read",
+        "memory_search",
+        "memory_status"
+      ],
+      "state": "ready",
+      "documents": 2,
+      "search_query": "catalogo",
+      "found_id": "memory-model",
+      "read_hash_matches": true,
+      "stderr_bytes": 169
+    },
+    {
+      "configuration_format": "claude",
+      "executor": "standalone MCP SDK client via generated launch arguments",
+      "tools": [
+        "memory_read",
+        "memory_search",
+        "memory_status"
+      ],
+      "state": "ready",
+      "documents": 2,
+      "search_query": "catalogo",
+      "found_id": "memory-model",
+      "read_hash_matches": true,
+      "stderr_bytes": 169
+    },
+    {
+      "configuration_format": "codex",
+      "executor": "standalone MCP SDK client via generated launch arguments",
+      "tools": [
+        "memory_read",
+        "memory_search",
+        "memory_status"
+      ],
+      "state": "ready",
+      "documents": 2,
+      "search_query": "catalogo",
+      "found_id": "memory-model",
+      "read_hash_matches": true,
+      "stderr_bytes": 169
+    }
+  ],
+  "configurations_unchanged": {
+    ".vscode/mcp.json": true,
+    ".mcp.json": true
+  },
+  "cache_unchanged": true,
+  "native_client_ui_verified": false
+}

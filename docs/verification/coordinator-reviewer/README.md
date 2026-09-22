@@ -18,6 +18,12 @@ sono in [native-result.md](native-result.md).
 `handoff.json`, `task.json` e `result.md` conservano consegna e stato della
 prima prova; `native-result.md` registra la verifica successiva.
 
+Questo pacchetto è una prova storica, conservata nel commit `a16b2b3`.
+L'integrazione successiva del catalogo MCP modifica alcuni dei 13 input:
+i suoi controlli sono in [mcp-catalog](../mcp-catalog/README.md).
+Gli hash e i rapporti originali rimangono invariati; non attestano le
+modifiche successive.
+
 ## Obiettivo
 
 Verificare che un revisore indipendente possa ricostruire incarico, snapshot
@@ -39,18 +45,21 @@ passaggi. Non rappresentare un file atteso come un'evidenza già disponibile.
 
 ## Verificare lo snapshot
 
-Dalla root del hub usare il comando stabile:
+Dalla root del hub, sulla revisione storica, usare il comando stabile:
 
 ```sh
-mise run hub:snapshot
+mise exec -- node scripts/check-snapshot.mjs docs/verification/coordinator-reviewer/snapshot.json
 ```
 
-Il task usa il Node dichiarato in `mise.toml`, legge il manifest esplicito e
+Il comando usa il Node dichiarato in `mise.toml`, legge il manifest esplicito e
 confronta i SHA-256 senza modificare gli input. File mancanti, manifest non
 valido e hash diversi producono un esito di errore. Non ricostruire la verifica
 con un lungo `node -e`: lo script evita di dover gestire quote annidate nella
 shell. Un comando fallito resta un tentativo fallito anche se una ripetizione
 successiva riesce; riportare entrambi gli esiti.
+
+Sul checkout corrente sono attese differenze rispetto a questa prova.
+`mise run hub:snapshot` verifica invece lo snapshot della milestone corrente.
 
 ## Percorsi di esecuzione
 
@@ -59,14 +68,16 @@ coordinatore e revisore hanno contesti separati. Non dimostra che il
 selettore o la delega interna di VS Code abbiano eseguito lo stesso passaggio.
 Il rapporto deve dichiarare l'esecutore effettivo.
 
-Per ripetere la verifica del percorso nativo, nella finestra Games con
-Codex e `games-coordinator` usare questo incarico:
+Il seguente incarico appartiene alla revisione storica. Per ripetere una
+review sul codice corrente serve un nuovo pacchetto con gli input aggiornati.
+Nella finestra Games con Codex e `games-coordinator`, l'incarico originario è:
 
 ```text
 Verifica la delega nativa di VS Code usando il pacchetto
 docs/verification/coordinator-reviewer/handoff.json.
 La root effettiva è /Users/deepzima/games e questa è manutenzione del hub.
-Verifica prima lo snapshot con mise run hub:snapshot.
+Verifica prima lo snapshot con:
+mise exec -- node scripts/check-snapshot.mjs docs/verification/coordinator-reviewer/snapshot.json
 Delega la review a games-reviewer con il
 pacchetto completo e write_scope vuoto; riporta nome del destinatario,
 stato ed esito della delega e integra verbalmente il rapporto.

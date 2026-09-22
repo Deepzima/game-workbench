@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-22T00:27:33.413Z",
+  "project": "projects/prova-3d-pipeline-one",
+  "task_id": "workflow-proof-001",
+  "interface": "Codex desktop",
+  "status": "completed",
+  "modes": [
+    "proof"
+  ],
+  "native_vscode_ui_verified": false,
+  "input_changes": [],
+  "historical_input_changes": [],
+  "steps": [
+    {
+      "id": "brief",
+      "status": "completed",
+      "executor": "/root (Codex desktop coordinator)",
+      "mode": "proof",
+      "started_at": "2026-09-22T00:12:09.344Z",
+      "finished_at": "2026-09-22T00:12:09.347Z",
+      "report": {
+        "path": "tasks/workflow-proof-001/brief/report.md",
+        "sha256": "eb74684ba3d580336021d5b7a355a716323d3798dc67c0274187338110d28ca0"
+      },
+      "evidence": [
+        {
+          "path": "tasks/workflow-proof-001/brief/contract.md",
+          "sha256": "5317ffd1b33cbd0ee6955b3d53ae272497ca5a02cfc2e2a5718c7548e96b0119"
+        }
+      ]
+    },
+    {
+      "id": "graphics",
+      "status": "completed",
+      "executor": "/root/memory_setup",
+      "mode": "proof",
+      "started_at": "2026-09-22T00:16:53.332Z",
+      "finished_at": "2026-09-22T00:20:27.524Z",
+      "report": {
+        "path": "tasks/workflow-proof-001/graphics/report.md",
+        "sha256": "7457db564aa4e455e1b09651234961c3c21f7bd5bdfc3ca963ca856c78bf75c9"
+      },
+      "evidence": [
+        {
+          "path": "tasks/workflow-proof-001/graphics/proposal.md",
+          "sha256": "f23c47497f6ffbc7a4f633911d5acf7173e541adc7bdb1b6ec5c1e7b9a03e383"
+        }
+      ]
+    },
+    {
+      "id": "gameplay",
+      "status": "completed",
+      "executor": "/root/hub_codex_compat",
+      "mode": "proof",
+      "started_at": "2026-09-22T00:16:53.338Z",
+      "finished_at": "2026-09-22T00:20:39.585Z",
+      "report": {
+        "path": "tasks/workflow-proof-001/gameplay/report.md",
+        "sha256": "220723fbe731e9059640a8f09c2b66df229da33b43d6e259bd55798967760014"
+      },
+      "evidence": [
+        {
+          "path": "tasks/workflow-proof-001/gameplay/proposal.md",
+          "sha256": "7660162259a40fe0cc621fb19423bed06f3e0930130cdfaf4f81749884f0851c"
+        }
+      ]
+    },
+    {
+      "id": "integration",
+      "status": "completed",
+      "executor": "/root/hub_codex_compat",
+      "mode": "proof",
+      "started_at": "2026-09-22T00:21:00.004Z",
+      "finished_at": "2026-09-22T00:23:01.945Z",
+      "report": {
+        "path": "tasks/workflow-proof-001/integration/report.md",
+        "sha256": "69567ff3cedfa26ffdf0c3b00ed1119cb605215b59405d994e4612f2c6b301bf"
+      },
+      "evidence": [
+        {
+          "path": "tasks/workflow-proof-001/integration/comparison.md",
+          "sha256": "01406daf37ae0877dfc0ef0b6960bb0e726b6d69832e65fa7cff9542440ca392"
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "status": "completed",
+      "executor": "/root/workflow_review",
+      "mode": "proof",
+      "started_at": "2026-09-22T00:23:21.341Z",
+      "finished_at": "2026-09-22T00:26:21.287Z",
+      "report": {
+        "path": "tasks/workflow-proof-001/review/report.md",
+        "sha256": "ff54b5254b57de660c28b3f02be04c5a48731ded0f34a31cf5484cc8fa418ea0"
+      },
+      "evidence": [
+        {
+          "path": "tasks/workflow-proof-001/review/evidence.json",
+          "sha256": "9829a257d90a47373620f8dfef4624897a126005810a2f8b5e463f32e6ee5fef"
+        }
+      ]
+    }
+  ],
+  "coordinator_checks": {
+    "hashes": {
+      "checked": 10,
+      "matched": 10,
+      "files": [
+        {
+          "path": "tasks/workflow-proof-001/workflow-inputs/brief.source",
+          "sha256": "dcd9da3342b6c8ae790b9fb027e431d7194edce8a0902cf245e6acdfa119b698",
+          "expected": "dcd9da3342b6c8ae790b9fb027e431d7194edce8a0902cf245e6acdfa119b698",
+          "matched": true
+        },
+        {
+          "path": "tasks/workflow-proof-001/workflow-inputs/definition.json",
+          "sha256": "1680a39d156971184764b98d79eba6790ae057ea03ba9bdc12856cfdc4369f21",
+          "expected": "1680a39d156971184764b98d79eba6790ae057ea03ba9bdc12856cfdc4369f21",
+          "matched": true
+        },
+        {
+          "path": "tasks/workflow-proof-001/brief/contract.md",
+          "sha256": "5317ffd1b33cbd0ee6955b3d53ae272497ca5a02cfc2e2a5718c7548e96b0119",
+          "expected": "5317ffd1b33cbd0ee6955b3d53ae272497ca5a02cfc2e2a5718c7548e96b0119",
+          "matched": true
+        },
+        {
+          "path": "tasks/workflow-proof-001/brief/report.md",
+          "sha256": "eb74684ba3d580336021d5b7a355a716323d3798dc67c0274187338110d28ca0",
+          "expected": "eb74684ba3d580336021d5b7a355a716323d3798dc67c0274187338110d28ca0",
+          "matched": true
+        },
+        {
+          "path": "tasks/workflow-proof-001/graphics/proposal.md",
+          "sha256": "f23c47497f6ffbc7a4f633911d5acf7173e541adc7bdb1b6ec5c1e7b9a03e383",
+          "expected": "f23c47497f6ffbc7a4f633911d5acf7173e541adc7bdb1b6ec5c1e7b9a03e383",
+          "matched": true
+        },
+        {
+          "path": "tasks/workflow-proof-001/graphics/report.md",
+          "sha256": "7457db564aa4e455e1b09651234961c3c21f7bd5bdfc3ca963ca856c78bf75c9",
+          "expected": "7457db564aa4e455e1b09651234961c3c21f7bd5bdfc3ca963ca856c78bf75c9",
+          "matched": true
+        },
+        {
+          "path": "tasks/workflow-proof-001/gameplay/proposal.md",
+          "sha256": "7660162259a40fe0cc621fb19423bed06f3e0930130cdfaf4f81749884f0851c",
+          "expected": "7660162259a40fe0cc621fb19423bed06f3e0930130cdfaf4f81749884f0851c",
+          "matched": true
+        },
+        {
+          "path": "tasks/workflow-proof-001/gameplay/report.md",
+          "sha256": "220723fbe731e9059640a8f09c2b66df229da33b43d6e259bd55798967760014",
+          "expected": "220723fbe731e9059640a8f09c2b66df229da33b43d6e259bd55798967760014",
+          "matched": true
+        },
+        {
+          "path": "tasks/workflow-proof-001/integration/comparison.md",
+          "sha256": "01406daf37ae0877dfc0ef0b6960bb0e726b6d69832e65fa7cff9542440ca392",
+          "expected": "01406daf37ae0877dfc0ef0b6960bb0e726b6d69832e65fa7cff9542440ca392",
+          "matched": true
+        },
+        {
+          "path": "tasks/workflow-proof-001/integration/report.md",
+          "sha256": "69567ff3cedfa26ffdf0c3b00ed1119cb605215b59405d994e4612f2c6b301bf",
+          "expected": "69567ff3cedfa26ffdf0c3b00ed1119cb605215b59405d994e4612f2c6b301bf",
+          "matched": true
+        }
+      ]
+    },
+    "branches_overlap": true,
+    "integration_after_branches": true,
+    "review_after_integration": true,
+    "distinct_branch_executors": true
+  },
+  "independent_review": {
+    "executor": "/root/workflow_review",
+    "verdict": "passed for documentary proof; no blocking findings",
+    "hashes_reported": {
+      "checked": 12,
+      "matched": 12
+    },
+    "scope": "Independent review of project artifacts, not the hub controller; reviewer had modified the controller earlier."
+  },
+  "setup": {
+    "verified_at": "2026-09-22T00:10:10.213Z",
+    "project": "prova-3d-pipeline-one",
+    "unity": {
+      "version": "6000.6.2f1",
+      "root": "unity/",
+      "template": "com.unity.template.urp-blank-17.2.1",
+      "initial_attempt": "failed: sandbox blocked Package Manager IPC socket",
+      "host_attempt": "passed: initialization exit 0",
+      "scope": "project initialization only; no gameplay or generated asset imported"
+    },
+    "claude_code": {
+      "version": "2.1.263",
+      "host_auth": "claude.ai / Max",
+      "higgsfield_mcp": "needs-auth",
+      "mcp_tool_calls": 0,
+      "generations": 0,
+      "scope": "real delegated read-only discovery"
+    },
+    "blender": {
+      "mcp": "not connected",
+      "scope": "get_addon_status only; no scene modified"
+    },
+    "pipeline": {
+      "status": "not_run",
+      "reason": "Higgsfield authorization and real asset production pending; workflow proof is separate"
+    }
+  },
+  "limitations": [
+    "Project files are local and ignored by the hub Git repository; project artifact hashes document this local run.",
+    "No generated asset, gameplay implementation, import, baking or playtest.",
+    "New native VS Code adapters and skill were not exercised in this desktop proof."
+  ]
+}

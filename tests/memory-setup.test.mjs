@@ -12,6 +12,18 @@ import { installDependencies, runSetup, parseSetupArgs, assertNodeVersion } from
 
 const configureMemory = options => configureReal({ isIgnored: () => true, ...options });
 
+const definition = () => ({
+  id: 'games-memory', transport: 'stdio', runtime: 'node', entrypoint: 'mcp/memory/server.mjs',
+  args: ['--hub-root', { root: 'hub' }], project_args: ['--project-root', { root: 'project' }],
+  env: { MISE_AUTO_INSTALL: 'false' },
+});
+
+async function seedCatalog(root) {
+  await fs.mkdir(path.join(root, 'mcp/memory'), { recursive: true });
+  await fs.writeFile(path.join(root, 'mcp/memory/server.mjs'), '// fixture MCP entrypoint\n');
+  await fs.writeFile(path.join(root, 'hub.json'), JSON.stringify({ schema_version: 1, mcp_servers: [definition()] }));
+}
+
 async function fixture(t) {
   const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'games memory setup ')));
   t.after(() => fs.rm(root, { recursive: true, force: true }));
@@ -19,6 +31,7 @@ async function fixture(t) {
   const project = path.join(root, 'external worktree');
   await fs.mkdir(hub);
   await fs.mkdir(project);
+  await seedCatalog(hub);
   async function put(relative, content, base = hub) {
     const filename = path.join(base, relative);
     await fs.mkdir(path.dirname(filename), { recursive: true });
@@ -40,7 +53,7 @@ test('genera snippet locali per tre client senza cambiare configurazioni o memor
   assert.equal(await f.read('.vscode/mcp.json'), existing);
   assert.equal(await f.read('memory/decision.md'), 'decisione persistente');
   const entry = JSON.parse(await f.read('.games/local/games-memory.vscode.json')).servers['games-memory'];
-  assert.deepEqual(entry, memoryEntry(f.hub, undefined, 'vscode'));
+  assert.deepEqual(entry, await memoryEntry(f.hub, undefined, 'vscode'));
   assert.deepEqual(entry.args, ['-C', '${workspaceFolder}', 'exec', '--no-deps', '--', 'node', 'mcp/memory/server.mjs', '--hub-root', '${workspaceFolder}']);
   assert.equal(entry.command, 'mise');
   assert.deepEqual(entry.env, { MISE_AUTO_INSTALL: 'false' });
@@ -57,12 +70,87 @@ test('genera snippet locali per tre client senza cambiare configurazioni o memor
   await assert.rejects(fs.access(path.join(f.hub, '.mcp.json')));
 });
 
+test('entrypoint, argomenti e ambiente del catalogo aggiornano i tre formati nativi', async t => {
+  const f = await fixture(t);
+  await configureMemory({ hubRoot: f.hub });
+  const changed = {
+    ...definition(), entrypoint: 'mcp/memory/replacement.mjs',
+    args: ['--hub-root', { root: 'hub' }, '--label', 'from catalog'],
+    project_args: ['--project-root', { root: 'project' }, '--project-label', 'project value'],
+    env: { MISE_AUTO_INSTALL: 'false', MEMORY_MODE: 'from-catalog' },
+  };
+  await f.put(changed.entrypoint, '// alternate fixture entrypoint\n');
+  await f.put('hub.json', JSON.stringify({ schema_version: 1, mcp_servers: [changed] }));
+  for (const projectRoot of [undefined, f.project]) {
+    await configureMemory({ hubRoot: f.hub, projectRoot });
+    const base = projectRoot ?? f.hub;
+    const entries = {
+      vscode: JSON.parse(await f.read('.games/local/games-memory.vscode.json', base)).servers['games-memory'],
+      claude: JSON.parse(await f.read('.games/local/games-memory.claude.json', base)).mcpServers['games-memory'],
+      codex: TOML.parse(await f.read('.games/local/games-memory.codex.toml', base)).mcp_servers['games-memory'],
+    };
+    for (const [client, entry] of Object.entries(entries)) {
+      const portable = client === 'vscode' && !projectRoot;
+      assert.deepEqual(entry.args, [
+        '-C', portable ? '${workspaceFolder}' : f.hub, 'exec', '--no-deps', '--', 'node',
+        portable ? changed.entrypoint : path.join(f.hub, changed.entrypoint),
+        '--hub-root', portable ? '${workspaceFolder}' : f.hub, '--label', 'from catalog',
+        ...(projectRoot ? ['--project-root', f.project, '--project-label', 'project value'] : []),
+      ]);
+      assert.deepEqual(entry.env, changed.env);
+      assert.equal(entry.command, 'mise');
+      assert.equal(entry.type, client === 'vscode' ? 'stdio' : undefined);
+    }
+  }
+});
+
+test('catalogo invalido o games-memory assente falliscono prima di creare file locali', async t => {
+  const f = await fixture(t);
+  const original = '{"servers":{"custom":{"command":"keep"}}}\n';
+  await f.put('.vscode/mcp.json', original);
+  const invalid = [
+    '{not-valid-json', {}, { mcp_servers: [] },
+    { mcp_servers: [{ ...definition(), id: 'another-server' }] },
+    { mcp_servers: [{ ...definition(), runtime: 'unknown-runtime' }] },
+    { mcp_servers: [{ ...definition(), entrypoint: 'mcp/memory/missing.mjs' }] },
+  ];
+  for (const catalog of invalid) {
+    await f.put('hub.json', typeof catalog === 'string' ? catalog : JSON.stringify({ schema_version: 1, ...catalog }));
+    await assert.rejects(configureMemory({ hubRoot: f.hub, client: 'vscode', apply: true }));
+    await assert.rejects(fs.access(path.join(f.hub, '.games')));
+    assert.equal(await f.read('.vscode/mcp.json'), original);
+  }
+  await fs.rm(path.join(f.hub, 'hub.json'));
+  await assert.rejects(configureMemory({ hubRoot: f.hub }));
+  await assert.rejects(fs.access(path.join(f.hub, '.games')));
+});
+
+test('apply usa lo stesso catalogo della preview anche se il file cambia durante l’operazione', async t => {
+  const f = await fixture(t);
+  const expected = await memoryEntry(f.hub, f.project, 'claude');
+  let ignoreChecks = 0;
+  await configureReal({
+    hubRoot: f.hub, projectRoot: f.project, client: 'claude', apply: true,
+    isIgnored: async () => {
+      ignoreChecks++;
+      // This callback runs after snippet generation, before client application.
+      await f.put('hub.json', '{changed after the validated snapshot');
+      return true;
+    },
+  });
+  assert.equal(ignoreChecks, 1);
+  const preview = JSON.parse(await f.read('.games/local/games-memory.claude.json', f.project)).mcpServers['games-memory'];
+  const applied = JSON.parse(await f.read('.mcp.json', f.project)).mcpServers['games-memory'];
+  assert.deepEqual(preview, expected);
+  assert.deepEqual(applied, expected);
+});
+
 test('progetto esterno: config e ownership restano nel progetto, server nel checkout hub', async t => {
   const f = await fixture(t);
   const result = await configureMemory({ hubRoot: f.hub, projectRoot: f.project, client: 'claude', apply: true });
   assert.equal(result.root, f.project);
   const entry = JSON.parse(await f.read('.mcp.json', f.project)).mcpServers['games-memory'];
-  assert.deepEqual(entry, memoryEntry(f.hub, f.project, 'claude'));
+  assert.deepEqual(entry, await memoryEntry(f.hub, f.project, 'claude'));
   assert.deepEqual(entry.args.slice(-2), ['--project-root', f.project]);
   assert.ok(result.generated.every(filename => filename.startsWith(f.project + path.sep)));
   await assert.rejects(fs.access(path.join(f.hub, '.games')));
@@ -125,10 +213,11 @@ test('aggiorna percorsi gestiti se il progetto usa un nuovo checkout del hub', a
   const f = await fixture(t);
   const secondHub = path.join(f.root, 'new hub');
   await fs.mkdir(secondHub);
+  await seedCatalog(secondHub);
   await configureMemory({ hubRoot: f.hub, projectRoot: f.project, client: 'claude', apply: true });
   const result = await configureMemory({ hubRoot: secondHub, projectRoot: f.project, client: 'claude', apply: true });
   assert.equal(result.changed, true);
-  assert.deepEqual(JSON.parse(await f.read('.mcp.json', f.project)).mcpServers['games-memory'], memoryEntry(secondHub, f.project, 'claude'));
+  assert.deepEqual(JSON.parse(await f.read('.mcp.json', f.project)).mcpServers['games-memory'], await memoryEntry(secondHub, f.project, 'claude'));
 });
 
 test('rifiuta registrazione contemporanea VS Code/Claude per evitare doppio MCP', async t => {
@@ -148,11 +237,12 @@ test('merge TOML conserva byte esterni al blocco e aggiorna solo il proprio serv
   assert.ok(initial.startsWith(original));
   const secondHub = path.join(f.root, 'next hub');
   await fs.mkdir(secondHub);
+  await seedCatalog(secondHub);
   await configureMemory({ hubRoot: secondHub, projectRoot: f.project, client: 'codex', apply: true });
   const updated = await f.read('.codex/config.toml', f.project);
   assert.ok(updated.startsWith(original));
   assert.deepEqual(TOML.parse(updated).mcp_servers.other, TOML.parse(original).mcp_servers.other);
-  assert.deepEqual(TOML.parse(updated).mcp_servers['games-memory'], memoryEntry(secondHub, f.project, 'codex'));
+  assert.deepEqual(TOML.parse(updated).mcp_servers['games-memory'], await memoryEntry(secondHub, f.project, 'codex'));
   const again = await configureMemory({ hubRoot: secondHub, projectRoot: f.project, client: 'codex', apply: true });
   assert.equal(again.changed, false);
   assert.equal(await f.read('.codex/config.toml', f.project), updated);
@@ -175,6 +265,7 @@ test('TOML riconosce chiavi quotate e rifiuta conflitti o blocchi che includono 
   await f.put('.codex/config.toml', edited, f.project);
   const secondHub = path.join(f.root, 'next hub');
   await fs.mkdir(secondHub);
+  await seedCatalog(secondHub);
   await assert.rejects(configureMemory({ hubRoot: secondHub, projectRoot: f.project, client: 'codex', apply: true }), /altre impostazioni/);
   assert.equal(await f.read('.codex/config.toml', f.project), edited);
 });
@@ -236,7 +327,7 @@ test('CLI da cwd diverso risolve hub dal file e lascia config reali intatte', as
   const result = spawnSync(process.execPath, [script, '--project-root', f.project], { cwd: f.root, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   const generated = JSON.parse(await f.read('.games/local/games-memory.vscode.json', f.project));
-  assert.deepEqual(generated.servers['games-memory'], memoryEntry(expectedHub, f.project, 'vscode'));
+  assert.deepEqual(generated.servers['games-memory'], await memoryEntry(expectedHub, f.project, 'vscode'));
   await assert.rejects(fs.access(path.join(f.project, '.vscode/mcp.json')));
   const setupScript = fileURLToPath(new URL('../scripts/setup.mjs', import.meta.url));
   const setup = spawnSync(process.execPath, [setupScript, '--skip-install', '--client', 'claude', '--project-root', f.project], { cwd: f.root, encoding: 'utf8' });

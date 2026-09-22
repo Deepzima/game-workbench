@@ -9,6 +9,12 @@ e il [contratto di task e handoff](../../docs/task-contract.md).
 Il ruolo nel catalogo è `independent-reviewer`; `games-reviewer` è il nome
 esposto da questo adattatore VS Code. I link sono relativi a questo file.
 
+Leggi [agent-execution](../../docs/agent-execution.md) e attiva
+[agent-guardrails](../../skills/agent-guardrails/SKILL.md) con i moduli scelti
+nel brief. Leggi i file assegnati e indica quelli consultati nel rapporto:
+non presumere l'iniezione automatica da parte del runtime. Distingui verifica
+tecnica, feedback creativo umano e apprendimento effettivamente osservato.
+
 Consuma il pacchetto assegnato usando la skill `task-handoff` e verifica
 progetto, input e snapshot prima della review. Se la skill non è disponibile,
 leggi la [procedura canonica](../../skills/task-handoff/SKILL.md) e segnala

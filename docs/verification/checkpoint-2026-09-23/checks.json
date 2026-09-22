@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-22T22:28:17.843Z",
+  "kind": "wip-checkpoint",
+  "hub_check": {
+    "exit_code": 0,
+    "roles": 7,
+    "skills": 6,
+    "guardrails": 6,
+    "contracts": 2,
+    "mcp_servers": 1,
+    "workflows": 1,
+    "adapters": 7
+  },
+  "hub_test": {
+    "exit_code": 0,
+    "tests": 129,
+    "passed": 129,
+    "failed": 0,
+    "skipped": 0
+  },
+  "hub_doctor": {
+    "exit_code": 0,
+    "authentication_checked": false,
+    "servers_started": false,
+    "known_warnings": [
+      "MCP names differ between Claude and VS Code; unrelated native entries preserved",
+      "Engine MCP connections and authentication not checked by doctor"
+    ]
+  },
+  "previous_snapshot_before_checkpoint_edits": {
+    "path": "docs/verification/executor-adapters/snapshot.json",
+    "checked": 86,
+    "matched": 86
+  },
+  "reserved_path_regression": {
+    "failed_before_fix": true,
+    "passed_after_fix": true,
+    "cases": [
+      "uppercase environment files",
+      "uppercase private directories",
+      "symlink alias to reserved input",
+      "decision and evidence paths"
+    ]
+  },
+  "scope": {
+    "hub": true,
+    "pilot_separate_repository": true,
+    "course_guides_excluded": true,
+    "gc_excluded": true,
+    "push": false
+  },
+  "pilot": {
+    "task": "hub-target-test-001",
+    "workflow_revision": 14,
+    "integration": "completed",
+    "human_feedback": "pending",
+    "independent_review": "pending",
+    "play_mode_checks": 13,
+    "synthetic_input": true,
+    "manual_playtest": false
+  },
+  "static_reviews": {
+    "code": "One reserved-path case-sensitivity issue fixed before commit; no P0/P1 found",
+    "candidate_files": "No apparent credentials, cache or native session database in audited candidates"
+  },
+  "limitations": [
+    "WIP save point, not release certification",
+    "Engine permissions and portability are limited to observed macOS sessions",
+    "Native MCPs and optional executor inference remain separately unverified"
+  ]
+}

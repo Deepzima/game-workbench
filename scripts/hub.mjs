@@ -5,6 +5,8 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import Ajv from 'ajv';
 import { parseDocument } from 'yaml';
+import { validateMcpCatalog } from './mcp-catalog.mjs';
+import { validateAgentAdapters } from './agent-adapters.mjs';
 
 export const HUB_ROOT = fileURLToPath(new URL('../', import.meta.url));
 
@@ -72,7 +74,7 @@ function verifyRoles(data, kind, roleIds) {
 
 export async function checkHub({ root = HUB_ROOT, task, handoff } = {}) {
   const errors = [];
-  const counts = { roles: 0, skills: 0, contracts: 0, documents: 0 };
+  const counts = { roles: 0, skills: 0, guardrails: 0, contracts: 0, documents: 0, mcpServers: 0, workflows: 0, adapters: 0 };
   const attempt = async (label, action) => {
     try { return await action(); } catch (error) {
       const message = error.code === 'ENOENT' ? 'File non trovato.' : error.message;
@@ -88,9 +90,12 @@ export async function checkHub({ root = HUB_ROOT, task, handoff } = {}) {
   });
   if (!manifest) return { ok: false, errors, counts };
 
+  const servers = await attempt('MCP', () => validateMcpCatalog({ root, servers: manifest.mcp_servers }));
+  if (servers) counts.mcpServers = servers.length;
+
   const roleIds = new Set();
   const skillIds = new Set();
-  for (const [kind, entries, ids] of [['Ruolo', manifest.roles, roleIds], ['Skill', manifest.skills, skillIds]]) {
+  for (const [kind, entries, ids] of [['Ruolo', manifest.roles, roleIds], ['Skill', manifest.skills, skillIds], ['Guardrail', manifest.guardrails ?? [], new Set()]]) {
     for (const entry of entries) {
       await attempt(`${kind} ${entry.id}`, async () => {
         if (ids.has(entry.id)) throw new Error('Identificatore duplicato nel catalogo.');
@@ -98,9 +103,12 @@ export async function checkHub({ root = HUB_ROOT, task, handoff } = {}) {
         if (!entry.file.endsWith('.md')) throw new Error('È richiesto un file Markdown.');
         const text = await readHubFile(root, entry.file);
         if (!text.trim()) throw new Error('Il documento è vuoto.');
-        if (kind === 'Skill') {
-          if (path.posix.basename(entry.file) !== 'SKILL.md' || path.posix.basename(path.posix.dirname(entry.file)) !== entry.id) {
+        if (kind === 'Skill' || kind === 'Guardrail') {
+          if (kind === 'Skill' && (path.posix.basename(entry.file) !== 'SKILL.md' || path.posix.basename(path.posix.dirname(entry.file)) !== entry.id)) {
             throw new Error('La skill deve risiedere in una directory con il proprio identificatore e chiamarsi SKILL.md.');
+          }
+          if (kind === 'Guardrail' && entry.file !== `guardrails/${entry.id}.md`) {
+            throw new Error('Il guardrail deve risiedere in guardrails/<id>.md.');
           }
           const frontmatter = text.replace(/^\uFEFF/, '').match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)([\s\S]*)$/);
           if (!frontmatter) throw new Error('Frontmatter YAML mancante o non delimitato.');
@@ -109,11 +117,27 @@ export async function checkHub({ root = HUB_ROOT, task, handoff } = {}) {
               typeof metadata.description !== 'string' || !metadata.description.trim()) {
             throw new Error('Il frontmatter richiede name uguale all’identificatore e description non vuota.');
           }
-          if (!frontmatter[2].trim()) throw new Error('Il corpo della skill è vuoto.');
-          counts.skills++;
+          if (!frontmatter[2].trim()) throw new Error('Il corpo del modulo è vuoto.');
+          if (kind === 'Skill') counts.skills++;
+          else counts.guardrails++;
         } else counts.roles++;
       });
     }
+  }
+
+  const adapters = await attempt('Adattatori', () => validateAgentAdapters({ root, adapters: manifest.adapters, roles: manifest.roles }));
+  if (adapters) counts.adapters = adapters.length;
+
+  const workflowIds = new Set();
+  for (const entry of manifest.workflows ?? []) {
+    await attempt(`Workflow ${entry.id}`, async () => {
+      if (workflowIds.has(entry.id)) throw new Error('Identificatore workflow duplicato.');
+      workflowIds.add(entry.id);
+      const { loadWorkflow } = await import('./workflow.mjs');
+      const { definition } = await loadWorkflow({ hubRoot: root, file: entry.file });
+      if (definition.id !== entry.id) throw new Error('ID del workflow diverso dal catalogo.');
+      counts.workflows++;
+    });
   }
 
   const validators = {};
@@ -163,7 +187,7 @@ export async function doctor({ root = HUB_ROOT, version = probeVersion } = {}) {
   checks.push({ status: node && Number(node.split('.')[0]) >= 22 ? 'ok' : 'error', message: node ? `Node ${node} (richiesto almeno 22).` : 'Node non disponibile.' });
   const uv = version('uv');
   checks.push({ status: uv ? 'ok' : 'error', message: uv ? `uv ${uv}.` : 'uv non disponibile nel PATH.' });
-  for (const command of ['claude', 'codex']) {
+  for (const command of ['claude', 'codex', 'opencode']) {
     const found = version(command);
     checks.push({ status: found ? 'ok' : 'warning', message: found ? `${command} ${found}; autenticazione non verificata.` : `${command} non disponibile o verifica della versione non riuscita; integrazione opzionale.` });
   }
@@ -210,7 +234,7 @@ export async function main(args = process.argv.slice(2)) {
     }
     const result = await checkHub(documents);
     for (const error of result.errors) console.error(`ERRORE: ${error}`);
-    if (result.ok) console.log(`OK: ${result.counts.roles} ruoli, ${result.counts.skills} skill, ${result.counts.contracts} contratti e ${result.counts.documents} documenti espliciti verificati.`);
+    if (result.ok) console.log(`OK: ${result.counts.roles} ruoli, ${result.counts.skills} skill, ${result.counts.guardrails} guardrail, ${result.counts.contracts} contratti, ${result.counts.mcpServers} MCP, ${result.counts.workflows} workflow, ${result.counts.adapters} adattatori e ${result.counts.documents} documenti espliciti verificati.`);
     return result.ok ? 0 : 1;
   }
   console.error('Uso: node scripts/hub.mjs check [--task FILE] [--handoff FILE] | doctor');

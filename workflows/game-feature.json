@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "game-feature",
+  "description": "Brief, grafica e gameplay paralleli, integrazione esclusiva e review indipendente. Il coordinatore esegue le deleghe tramite il runtime disponibile.",
+  "steps": [
+    {
+      "id": "brief", "role": "coordinator", "adapter": "games-coordinator",
+      "objective": "Precisare il brief esistente, gli input e i criteri verificabili della feature.",
+      "depends_on": [], "write_scope": ["tasks/{task_id}/brief/"]
+    },
+    {
+      "id": "graphics", "role": "technical-artist", "adapter": "games-graphics",
+      "objective": "Preparare gli asset e la loro consegna verificata, mantenendo gli originali e rispettando il budget del task.",
+      "depends_on": ["brief"], "write_scope": ["assets/", "tasks/{task_id}/graphics/"]
+    },
+    {
+      "id": "gameplay", "role": "gameplay-programmer", "adapter": "games-programmer",
+      "objective": "Implementare gli script di gameplay delimitati dal brief e riportare controlli e limiti.",
+      "depends_on": ["brief"], "write_scope": ["unity/Assets/Scripts/", "tasks/{task_id}/gameplay/"]
+    },
+    {
+      "id": "integration", "role": "gameplay-programmer", "adapter": "games-programmer",
+      "objective": "Integrare asset e gameplay come unico scrivente degli asset Unity, poi verificare il risultato nel runtime scelto.",
+      "depends_on": ["graphics", "gameplay"], "write_scope": ["unity/Assets/", "tasks/{task_id}/integration/"]
+    },
+    {
+      "id": "review", "role": "independent-reviewer", "adapter": "games-reviewer",
+      "objective": "Esaminare input e prove della feature senza modificarli; restituire il rapporto al coordinatore che lo registra.",
+      "depends_on": ["integration"], "write_scope": []
+    }
+  ]
+}

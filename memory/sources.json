@@ -2,6 +2,8 @@
   "schema_version": 1,
   "documents": [
     "memory/decisions/workspace-scope.md",
-    "memory/decisions/memory-model.md"
+    "memory/decisions/memory-model.md",
+    "memory/decisions/workflow-model.md",
+    "memory/decisions/agent-execution.md"
   ]
 }

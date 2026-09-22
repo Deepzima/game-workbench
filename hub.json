@@ -9,8 +9,45 @@
     { "id": "qa-engineer", "file": "agents/qa-engineer.md" },
     { "id": "independent-reviewer", "file": "agents/independent-reviewer.md" }
   ],
+  "adapters": [
+    { "id": "games-coordinator", "client": "vscode", "role": "coordinator", "file": ".github/agents/games-coordinator.agent.md" },
+    { "id": "games-designer", "client": "vscode", "role": "game-designer", "file": ".github/agents/games-designer.agent.md" },
+    { "id": "games-architect", "client": "vscode", "role": "software-architect", "file": ".github/agents/games-architect.agent.md" },
+    { "id": "games-graphics", "client": "vscode", "role": "technical-artist", "file": ".github/agents/games-graphics.agent.md" },
+    { "id": "games-programmer", "client": "vscode", "role": "gameplay-programmer", "file": ".github/agents/games-programmer.agent.md" },
+    { "id": "games-qa", "client": "vscode", "role": "qa-engineer", "file": ".github/agents/games-qa.agent.md" },
+    { "id": "games-reviewer", "client": "vscode", "role": "independent-reviewer", "file": ".github/agents/games-reviewer.agent.md" }
+  ],
   "skills": [
-    { "id": "task-handoff", "file": "skills/task-handoff/SKILL.md" }
+    { "id": "task-handoff", "file": "skills/task-handoff/SKILL.md" },
+    { "id": "game-feature", "file": "skills/game-feature/SKILL.md" },
+    { "id": "agent-guardrails", "file": "skills/agent-guardrails/SKILL.md" },
+    { "id": "delegate-code", "file": "skills/delegate-code/SKILL.md" },
+    { "id": "local-art", "file": "skills/local-art/SKILL.md" },
+    { "id": "course-lab", "file": "skills/course-lab/SKILL.md" }
+  ],
+  "guardrails": [
+    { "id": "workspace-scope", "file": "guardrails/workspace-scope.md" },
+    { "id": "human-review", "file": "guardrails/human-review.md" },
+    { "id": "readable-code", "file": "guardrails/readable-code.md" },
+    { "id": "asset-quality", "file": "guardrails/asset-quality.md" },
+    { "id": "learning-integrity", "file": "guardrails/learning-integrity.md" },
+    { "id": "netcode-performance", "file": "guardrails/netcode-performance.md" }
+  ],
+  "workflows": [
+    { "id": "game-feature", "file": "workflows/game-feature.json" }
+  ],
+  "mcp_servers": [
+    {
+      "id": "games-memory",
+      "description": "Ricerca, lettura e stato della memoria condivisa del hub e del checkout selezionato",
+      "transport": "stdio",
+      "runtime": "node",
+      "entrypoint": "mcp/memory/server.mjs",
+      "args": ["--hub-root", { "root": "hub" }],
+      "project_args": ["--project-root", { "root": "project" }],
+      "env": { "MISE_AUTO_INSTALL": "false" }
+    }
   ],
   "contracts": {
     "task": {

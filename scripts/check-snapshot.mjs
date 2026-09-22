@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 export const HUB_ROOT = fileURLToPath(new URL('../', import.meta.url));
-export const DEFAULT_SNAPSHOT = 'docs/verification/coordinator-reviewer/snapshot.json';
+export const DEFAULT_SNAPSHOT = 'docs/verification/checkpoint-2026-09-23/snapshot.json';
 
 const inside = (root, target) => {
   const relative = path.relative(root, target);

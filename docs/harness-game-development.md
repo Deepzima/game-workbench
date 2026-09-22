@@ -1,5 +1,10 @@
 # Harness per lo sviluppo videoludico
 
+> Aggiornamento operativo del 22 settembre 2026: la scelta degli esecutori è
+> flessibile e Claude Code/OpenCode sono opzionali. Per il comportamento
+> corrente leggere [agent-execution](agent-execution.md); le proposte e la
+> ricerca qui sotto conservano il loro contesto iniziale.
+
 Ricerca del 21 settembre 2026, con prima base implementata nella stessa data:
 catalogo `hub.json`, sette ruoli comuni, skill `task-handoff`, schemi e modelli
 di task/handoff, comandi `hub:check`, `hub:doctor` e `hub:test`. Vedi il
@@ -9,11 +14,21 @@ Sono presenti anche gli adattatori VS Code del coordinatore e del revisore e il 
 `.agents/skills` alla directory comune; la discovery della skill è verificata
 nel runtime Codex di VS Code. Vedi la [guida operativa](vscode-agents.md#primo-ruolo-e-skill-condivisa).
 È implementata anche la [memoria v1](../mcp/memory/README.md), con indice
-SQLite, MCP di sola lettura e comandi mise di setup. Il resto del documento
-descrive il percorso proposto: gli altri adattatori di ruolo e il runner
-di delega non sono ancora implementati. Nella ricerca iniziale sono stati esaminati
+SQLite, MCP di sola lettura e comandi mise di setup. Dal 22 settembre 2026
+la voce `games-memory` in `hub.json.mcp_servers` è la sorgente validata degli
+adattatori generati da `hub:setup` e `hub:sync`. Il successivo
+[workflow game-feature](workflows.md) aggiunge skill, stato persistente e
+adattatori per grafica e programmazione. Una prima
+[delega CLI a Claude Code](pipelines/claude-higgsfield.md) ha verificato la
+discovery Higgsfield; il servizio richiede ancora autorizzazione.
+Sono ora presenti tutti e sette gli adattatori e i launcher generali per
+Claude e OpenCode; lo [stato operativo](hub-status.md) distingue i controlli
+sui file dalle prove nei client.
+Nella ricerca iniziale sono stati esaminati
 file locali, help delle CLI e documentazione ufficiale; non sono stati avviati
-task Claude, server MCP o operazioni sugli engine per questa milestone.
+task Claude, server MCP o operazioni sugli engine durante quella ricerca.
+Le prove successive della memoria comprendono chiamate MCP via stdio;
+le verifiche nei client e negli engine restano distinte.
 
 La ricerca prosegue con [memoria condivisa, hook, plugin e handoff](memory-and-handoffs.md),
 che definisce come conservare conoscenze e trasferire incarichi fra harness.
@@ -90,10 +105,11 @@ Le definizioni esistenti in `.claude/agents/` restano intatte in questa fase.
 
 ```text
 games/
+  hub.json                 # catalogo condiviso, inclusa la sezione mcp_servers
   agents/                  # definizioni comuni dei ruoli
   skills/<nome>/SKILL.md    # procedure condivise e relative risorse
   workflows/               # passaggi riutilizzabili tra i ruoli
-  mcp/                     # catalogo server e profili di utilizzo
+  mcp/                     # componenti locali dei server MCP
     memory/                # componente MCP per la memoria condivisa
   memory/                  # note comuni del hub
   .games/cache/            # indici locali ricostruibili, esclusi da Git
@@ -225,9 +241,21 @@ ragionata né garantisce che riesponga tutti gli MCP collegati. Non è quindi
 il contratto scelto per il runner.
 [Claude Code come server MCP](https://code.claude.com/docs/en/mcp#use-claude-code-as-an-mcp-server).
 
-Il catalogo comune descriverà server, dipendenze, riferimenti alle variabili
-d'ambiente, target e controlli di disponibilità. I client usano configurazioni
-proprie; condividere il catalogo non implica condividere la stessa connessione.
+Il catalogo `hub.json.mcp_servers` descrive ora `games-memory`: trasporto
+stdio, runtime Node, entrypoint JavaScript locale dentro `mcp/`, argomenti e
+ambiente non segreto. Lo schema v1 ammette argomenti letterali portabili e
+oggetti `{ "root": "hub" }`; `project_args`, opzionale e aggiunto soltanto
+per un progetto selezionato, ammette anche `{ "root": "project" }`.
+`hub:setup` e `hub:sync` validano questi dati e generano le configurazioni
+native; una definizione assente o invalida non viene sostituita da valori
+predefiniti nel codice. Vedi il [formato del catalogo memoria](../mcp/memory/README.md#catalogo-e-adattatori).
+
+La generazione distribuisce soltanto `games-memory`. Meshy, Higgsfield,
+Unity, Unreal e Blender restano nelle configurazioni esistenti e sono
+preservati: la loro migrazione richiederà definizioni e verifiche proprie.
+Profili di utilizzo, ulteriori runtime, trasporti e controlli di disponibilità
+restano da progettare. I client usano configurazioni proprie; condividere il
+catalogo non implica condividere la stessa connessione.
 I server stdio normalmente servono un client; quelli HTTP possono servirne
 più di uno. [Architettura MCP](https://modelcontextprotocol.io/docs/learn/architecture).
 
@@ -274,22 +302,29 @@ indipendenti.
   installazione e versione.
 - `mcp`: elenco dei server visti da Claude, non verifica comune a tutti gli
   harness. I task OAuth restano sospesi.
-- `hub:check`: catalogo, documenti dei ruoli, frontmatter della skill, schemi
-  e modelli; eventuali task di gioco soltanto se indicati esplicitamente.
+- `hub:check`: catalogo, definizioni MCP ed entrypoint locali, documenti dei
+  ruoli, frontmatter della skill, schemi e modelli; eventuali task di gioco
+  soltanto se indicati esplicitamente.
 - `hub:doctor`: versioni, presenza di VS Code e nomi MCP configurati, senza
   provare autenticazioni, inferenza o connessioni.
 - `hub:test`: test del validatore e delle condizioni dei contratti.
-- `hub:setup`: dipendenze bloccate e frammenti MCP locali; `hub:sync` genera
-  e, con client esplicito e `--apply`, registra il solo adattatore memoria.
+- `hub:setup`: dipendenze bloccate e frammenti MCP locali derivati da
+  `hub.json.mcp_servers`; `hub:sync` usa lo stesso catalogo validato e,
+  con client esplicito e `--apply`, registra il solo adattatore memoria.
 - `memory:index`, `memory:status`, `memory:search`, `memory:read`: indice e
   accesso alle note ammesse dai manifest del hub e dei checkout selezionati.
+- `workflow`: stato, dipendenze, hash e handoff di una run esplicita nel
+  progetto. La delega viene eseguita dal coordinatore tramite il runtime;
+  il comando non avvia agenti né servizi.
+- `claude:run`, `opencode:run`: esecutori opzionali con checkout e brief
+  espliciti, senza installazione o login automatico; vedere
+  [esecutori e limiti](executors.md).
 
 ### Comandi proposti, ancora da implementare
 
 | Ambito | Task indicativo | Responsabilità |
 |---|---|---|
 | Hub | Estensione di `hub:sync` | Collegare anche gli adattatori di ruolo e gli MCP oltre alla memoria |
-| Hub | `delegate:claude` | Richiamare il runner con incarico esplicito e risultato strutturato |
 | Gioco | `build`, `test`, `verify`, `assets:export` | Eseguire le procedure specifiche dell'engine e della piattaforma |
 
 Ogni gioco definirà il proprio `mise.toml`. Per indirizzarlo esplicitamente
@@ -341,13 +376,15 @@ stampare credenziali.
 ## Stato locale e prossimi passi
 
 Verificato sui file: il catalogo comune affianca i ruoli Claude esistenti;
-gli adattatori VS Code di coordinatore e revisore sono presenti, gli altri
-restano da implementare. `.mcp.json`
+i sette adattatori VS Code sono presenti e associati ai ruoli canonici nel
+catalogo. Coordinatore e revisore hanno una prova nell'Agent Host; la
+discovery e l'uso degli altri cinque restano da osservare. `.mcp.json`
 elenca Meshy, Higgsfield, Unity e Unreal, mentre `.vscode/mcp.json` include
 anche Blender e ora `games-memory`. La memoria è registrata soltanto in
 VS Code per evitare duplicazioni; i frammenti TUI sono locali. La restante
 divergenza di configurazione non è la prova di un
-guasto: la disponibilità effettiva dei server non è stata testata.
+guasto. La disponibilità va verificata per ogni client: nella discovery CLI
+Claude Higgsfield ha risposto `needs-auth`; il MCP Blender non era connesso.
 
 Ordine proposto per l'implementazione:
 
@@ -363,15 +400,26 @@ Ordine proposto per l'implementazione:
    è verificata tramite i log dell'Agent Host e delle sessioni, con rapporto
    restituito e 13 input invariati. Resta da verificare un task di gioco.
 3. **Memoria v1 implementata:** note versionate, indice SQLite e tre strumenti
-   MCP in sola lettura, con setup e adattatori. Completare le prove nei client
-   e sulle piattaforme di destinazione; il catalogo degli altri MCP rimane
-   da uniformare e verificare nel percorso principale.
-4. Integrare Claude Code come strumento della sessione principale, iniziando
-   dalla review di sola lettura con risultato ed evidenze restituiti a VS Code.
+   MCP in sola lettura, con setup e adattatori generati dalla voce
+   `games-memory` del catalogo. Validazione e trasporto stdio hanno prove
+   proprie; completare separatamente le prove nei client e sulle piattaforme
+   di destinazione. Gli altri MCP rimangono da migrare e verificare nel
+   percorso principale; nessuna di queste verifiche sostituisce un controllo
+   del gioco nell'engine.
+4. **Esecutori CLI opzionali:** Claude Code ha risposto alla prima discovery
+   con il login locale claude.ai/Max. I launcher generali Claude e OpenCode
+   sono disponibili con test locali; l'esecuzione di un incarico reale
+   attraverso ciascun launcher resta da verificare. Per il ramo generativo
+   servono l'autenticazione Higgsfield e una generazione; per mock e UV è
+   disponibile anche il percorso locale senza servizi generativi.
 5. Verificare gli accessi alternativi dalle TUI Codex e Claude sullo stesso
    progetto, usando lo stato persistente senza dipendere dalla chat VS Code.
-6. Completare un piccolo task videoludico in un progetto scelto dall'utente:
-   implementazione, build, controllo nell'engine e review della stessa versione.
+6. **Pilot predisposto:** `projects/prova-3d-pipeline-one`, con progetto Unity
+   inizializzato e workflow documentale. Completare produzione degli asset,
+   gameplay, import, verifica nell'engine e review: vedere la
+   [milestone workflow](verification/workflow-v1/README.md).
 
-`gc` resta escluso. La migrazione delle definizioni e la scelta del primo
-gioco/engine non sono state eseguite in questa ricerca.
+`gc` resta escluso. Il pilot è stato scelto successivamente alla ricerca
+iniziale; le definizioni Claude preesistenti non sono state migrate.
+Lo [stato operativo](hub-status.md) raccoglie le verifiche aperte; questa
+ricerca conserva anche il contesto delle decisioni precedenti.

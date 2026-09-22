@@ -55,6 +55,11 @@ locali potenzialmente versionabili nei progetti esterni.
 
 ## Limiti dichiarati
 
+Questi limiti descrivono la prova del 21 settembre. Il 22 settembre l'utente
+ha confermato anche l'uso degli strumenti dalla sessione VS Code Games:
+vedi [esito nel client](mcp-catalog/vscode-result.md). La prova SDK originaria
+e i suoi risultati rimangono distinti da questa conferma successiva.
+
 - Le chiamate MCP sono state eseguite da client SDK di prova, non attraverso
   un turno del modello nella finestra VS Code. La registrazione nel workspace
   è presente; il caricamento nella sessione Agents resta da osservare.

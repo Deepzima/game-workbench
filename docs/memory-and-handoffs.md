@@ -9,6 +9,9 @@ alla [guida games-memory](../mcp/memory/README.md).
 La prima base implementata comprende ora il [contratto di task e handoff](task-contract.md)
 e la skill associata. È ora implementata anche la memoria v1: manifest di note,
 indice SQLite FTS5, strumenti MCP di sola lettura e setup/adattatori mise.
+La definizione di avvio di `games-memory` è in `hub.json.mcp_servers`;
+`hub:sync` la valida e la traduce nei formati dei client. Questa generazione
+gestisce la memoria; gli altri MCP richiedono ancora integrazioni proprie.
 Hook, memoria semantica e runner Claude restano fuori da questa implementazione.
 
 Il percorso principale è VS Code Agents, con TUI Codex e Claude come accessi
@@ -179,7 +182,8 @@ Il flusso implementato è:
    mise dopo averla esaminata.
 2. `mise install` prepara i runtime dichiarati con versioni precise.
 3. `mise run hub:setup` installa le dipendenze bloccate e prepara gli
-   adattatori locali. `hub:sync -- --client vscode --apply` registra quello
+   adattatori locali dalla voce `games-memory` di `hub.json.mcp_servers`.
+   `hub:sync -- --client vscode --apply` registra quello
    VS Code nel hub, preservando le altre entry e rifiutando conflitti.
 4. `mise run memory:index` costruisce l'indice locale delle fonti esplicite.
 5. Il client selezionato avvia il server stdio attraverso `mise exec`, con
@@ -315,11 +319,13 @@ eredita automaticamente tutta la conversazione e la memoria del padre.
 Il fork è un caso diverso. La restituzione del risultato al padre non
 trasferisce la responsabilità dell'intero task al subagente.
 
-Per una sessione Claude persistente il runner deve registrare il suo ID e
-riprenderlo esplicitamente con `--resume`; `--continue` sceglie la sessione
+Per riprendere una sessione Claude persistente occorre registrare il suo ID e
+usarlo esplicitamente con `--resume`; `--continue` sceglie la sessione
 più recente e può essere ambiguo con incarichi concorrenti.
 [Ripresa delle sessioni](https://code.claude.com/docs/en/headless#continue-conversations).
-Un ID Claude non è un ID di sessione Codex.
+Un ID Claude non è un ID di sessione Codex. Il launcher `claude:run` del hub
+avvia un nuovo incarico e non offre la ripresa nativa automatica: lo stato
+portabile rimane nel brief e nei checkpoint del progetto.
 
 ### Il pacchetto di passaggio del hub
 
@@ -353,10 +359,11 @@ memory_refs:
 ```
 
 La revisione può essere un commit con il relativo diff oppure hash/versioni
-degli artefatti se Git non è disponibile. Il runner da implementare caricherà
-il ruolo, comporrà il prompt con questo pacchetto e le informazioni pertinenti,
-quindi avvierà il
-destinatario. I file referenziati devono essere effettivamente accessibili;
+degli artefatti se Git non è disponibile. Il coordinatore prepara il brief
+con ruolo, pacchetto e informazioni pertinenti, poi avvia il destinatario.
+I [launcher CLI](executors.md) passano il brief esplicito al worker; non
+scelgono il ruolo né aggiornano da soli il task. I file referenziati devono
+essere effettivamente accessibili;
 per ambienti remoti occorre trasferirli esplicitamente.
 
 Il destinatario restituisce stato, rilievi/modifiche, evidenze e limiti. Il

@@ -52,7 +52,7 @@ description = "Mostra percorso e stato dell'istanza VS Code dedicata"
 run = "zsh -f scripts/vscode-agents.zsh --check"
 
 [tasks."hub:check"]
-description = "Valida catalogo, ruoli, skill e formati dei task del hub"
+description = "Valida catalogo, ruoli, adattatori, skill e formati dei task del hub"
 dir = "{{config_root}}"
 run = "node scripts/hub.mjs check"
 
@@ -67,9 +67,9 @@ dir = "{{config_root}}"
 run = "node --test tests/*.test.mjs"
 
 [tasks."hub:snapshot"]
-description = "Verifica gli hash della prova coordinatore-revisore"
+description = "Verifica gli hash dell'ultima milestone del hub"
 dir = "{{config_root}}"
-run = "node scripts/check-snapshot.mjs docs/verification/coordinator-reviewer/snapshot.json"
+run = "node scripts/check-snapshot.mjs"
 
 [tasks."hub:setup"]
 description = "Installa dipendenze bloccate e prepara gli adattatori MCP memoria"
@@ -100,3 +100,18 @@ run = "node mcp/memory/cli.mjs search"
 description = "Legge una nota ammessa: --scope hub|project --path memory/nota.md"
 dir = "{{config_root}}"
 run = "node mcp/memory/cli.mjs read"
+
+[tasks.workflow]
+description = "Stato e consegne dei workflow del progetto; --help per i comandi"
+dir = "{{config_root}}"
+run = "node scripts/workflow.mjs"
+
+[tasks."opencode:run"]
+description = "Delega opzionale a OpenCode installato; progetto e brief espliciti, --help per uso"
+dir = "{{config_root}}"
+run = "node scripts/opencode.mjs"
+
+[tasks."claude:run"]
+description = "Delega opzionale a Claude Code installato; progetto e brief espliciti, --help per uso"
+dir = "{{config_root}}"
+run = "node scripts/claude.mjs"

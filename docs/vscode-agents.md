@@ -158,9 +158,102 @@ sessione principale e figlio verifica l'esecuzione; la resa grafica degli
 eventi non è stata osservata direttamente dal manutentore. La presenza del
 solo file `games-reviewer.agent.md` non sarebbe invece una prova di delega.
 
-Per controllare nuovamente gli input usare `mise run hub:snapshot`.
-Il comando stabile è verificato localmente; non è ancora stato provato
-nell'ambiente VS Code che ha prodotto gli errori OpenSSL e Python/Xcode.
+Per ricontrollare gli input storici seguire il
+[pacchetto della prova](verification/coordinator-reviewer/README.md#verificare-lo-snapshot).
+`mise run hub:snapshot` verifica ora il checkpoint dell'ultima milestone,
+separato dai 13 input di questa precedente revisione.
+
+## Workflow grafica e gameplay
+
+Il workflow `game-feature` aggiunge `games-graphics` e `games-programmer` ai
+destinatari del coordinatore. Le sette definizioni sono in `.github/agents/`;
+la nuova skill passa dallo stesso collegamento `.agents/skills`. Per provarle
+aprire una nuova sessione Codex nel workspace **games**, selezionando
+**games-coordinator**. Indicare il progetto di destinazione nel prompt.
+
+Per ripetere la sola prova delle deleghe nel progetto pilota:
+
+> Usa game-feature in projects/prova-3d-pipeline-one. Crea una nuova prova
+> del coordinamento con task ID vscode-workflow-proof-001, usando
+> docs/pilot-brief.md del progetto. Delega in parallelo a games-graphics e
+> games-programmer, raccogli le proposte, poi assegna confronto d'integrazione
+> e review. Solo documenti nelle directory delle rispettive fasi; niente
+> generazioni, MCP o modifiche Unity. Registra gli ID reali degli esecutori,
+> rapporti ed evidenze in modalità proof. Se il task esiste, controllane lo
+> stato invece di sovrascriverlo o duplicare le deleghe.
+
+La [prova del workflow](verification/workflow-v1/README.md) svolta nel runtime
+Codex desktop non certifica la discovery dei nuovi adattatori nell'Agent Host.
+Nella prova VS Code vanno osservati avvio dei destinatari e ritorno delle
+consegne. Per una feature reale basta descrivere progetto, comportamento e
+asset da riutilizzare: il coordinatore prepara il brief e sceglie le fasi.
+Comandi e limiti della ripresa sono in [workflows.md](workflows.md).
+
+## Sette ruoli disponibili come file
+
+| Ruolo nel menu | Fonte comune |
+|---|---|
+| games-coordinator | agents/coordinator.md |
+| games-designer | agents/game-designer.md |
+| games-architect | agents/software-architect.md |
+| games-graphics | agents/technical-artist.md |
+| games-programmer | agents/gameplay-programmer.md |
+| games-qa | agents/qa-engineer.md |
+| games-reviewer | agents/independent-reviewer.md |
+
+`hub.json.adapters` dichiara questa corrispondenza. `mise run hub:check`
+controlla file, frontmatter, associazione al ruolo e link locali. Per gli
+adattatori del hub usare link Markdown inline come
+`[ruolo](../../agents/coordinator.md)`: il controllo non interpreta HTML o
+link definiti per riferimento e non recupera pagine web. La sezione del
+catalogo è un inventario validabile; non installa agenti nel client.
+
+Usare i ruoli necessari all'incarico; non è obbligatorio avviarli tutti.
+I nuovi file e le nuove skill sono validati localmente, ma la loro discovery
+nella finestra Agents resta da osservare. Una nuova sessione nel workspace
+corrente evita di confondere istruzioni memorizzate da una sessione precedente.
+I wrapper leggono [agent-execution](agent-execution.md) e la skill
+`agent-guardrails`, con moduli scelti nel brief. Questa lettura non imposta
+permessi della sandbox e non dimostra una delega avvenuta.
+
+Per verificare un ruolo nuovo, selezionarlo nella nuova sessione e inviare:
+
+> Verifica in sola lettura il ruolo che ho selezionato. Leggi il suo
+> adattatore in .github/agents e la fonte canonica indicata. Riporta nome
+> dell'adattatore, ID del ruolo comune, file effettivamente letti e un
+> esempio di attività dentro e fuori dalle sue responsabilità. Non creare
+> file, non avviare MCP o altri worker e non eseguire task di gioco.
+
+Conservare la risposta e l'evidenza delle letture, indicando sessione e
+ruolo osservati. Una risposta corretta verifica l'applicazione di base;
+per dichiarare la delega funzionante occorre anche osservare avvio del
+destinatario e consegna al coordinatore.
+
+Per provare le guide, usare `course-lab` e indicare esplicitamente
+`projects/gamehub/2d` oppure `projects/gamehub/3d`. La guida iniziale del
+percorso contiene un prompt di sola lettura. Claude Code e OpenCode sono
+opzioni di esecuzione; il coordinatore può completare direttamente il lavoro
+fattibile se non sono disponibili. Il [protocollo comune](agent-execution.md)
+spiega checkpoint, pause, fallback e gestione del feedback.
+
+## Memoria condivisa nella sessione
+
+Il 22 settembre 2026 l'utente ha confermato la prova minima di
+`games-memory` nella finestra VS Code Games: stato `ready` con 2 documenti,
+ricerca di `catalogo` e lettura della nota tramite MCP. L'agente ha dichiarato
+di non aver usato il terminale; l'utente ha osservato i tool nel debug della
+conversazione. L'[esito registrato](verification/mcp-catalog/vscode-result.md)
+distingue questa conferma dalle precedenti prove SDK e dai controlli ancora
+necessari per TUI e progetti di gioco.
+
+Per ripetere il controllo, chiedere all'agente:
+
+> Usa gli strumenti MCP di games-memory: controlla lo stato, cerca “catalogo”
+> e leggi la nota trovata. Se gli strumenti non sono disponibili, segnalalo
+> senza usare il terminale come alternativa.
+
+La [guida games-memory](../mcp/memory/README.md) descrive la registrazione
+con `hub:sync`, i manifest delle note e l'indicizzazione esplicita.
 
 ## Verificare Claude Max
 

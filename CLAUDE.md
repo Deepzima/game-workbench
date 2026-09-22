@@ -4,14 +4,40 @@ Hub per integrare gli harness AI nello sviluppo videoludico: dal design e dagli 
 
 ## Base condivisa
 
-`hub.json` cataloga i ruoli in `agents/`, le procedure in `skills/` e i formati
-di task e handoff in `schemas/`. Per i nuovi incarichi usa
+`hub.json` cataloga i ruoli in `agents/`, i relativi adattatori in `adapters`,
+le procedure in `skills/`, i formati di task e handoff in `schemas/` e le
+definizioni MCP in `mcp_servers`.
+`hub:setup` e `hub:sync` generano da queste ultime gli adattatori di
+`games-memory`; gli altri server esistenti restano nelle configurazioni
+native. Il catalogo non registra automaticamente strumenti negli harness.
+Per i nuovi incarichi usa
 `docs/task-contract.md`: task, documenti e asset specifici vivono nel checkout
-effettivo del gioco. Coordinatore e revisore hanno adattatori per VS Code e
-`.agents/skills` collega le procedure per Codex; l'integrazione nativa Claude
-dei ruoli comuni e il runner di delega a Claude sono da implementare.
+effettivo del gioco. Tutti e sette i ruoli comuni hanno adattatori per VS Code;
+`.agents/skills` collega le procedure per Codex. I nuovi adattatori richiedono
+ancora verifica nel client.
+Per richieste con grafica e gameplay usare `skills/game-feature/SKILL.md`:
+brief comune, deleghe parallele, integrazione e review. `mise run workflow`
+conserva lo stato nel progetto ma non avvia agenti. Distinguere prove del
+coordinamento da produzione e verifiche reali nell'engine.
 
-`mise run hub:check` valida il catalogo e i contratti; `mise run hub:doctor`
+Leggere `docs/agent-execution.md`: Claude Code e OpenCode sono esecutori
+opzionali (`skills/delegate-code/SKILL.md`). Se mancano, l'agente completa
+direttamente quanto possibile senza alterare obiettivo, scope e budget.
+La review indipendente richiede comunque un esecutore distinto.
+`mise run claude:run` e `mise run opencode:run` avviano CLI già installate
+con progetto e brief espliciti; permessi, MCP e limiti sono descritti in
+`docs/executors.md`. Non avviare un secondo worker sullo stesso ambito.
+`skills/agent-guardrails/SKILL.md` carica i moduli scelti dal brief in
+`hub.json.guardrails`: sono istruzioni, non permessi o sandbox.
+Il controller consente checkpoint umani e pausa dei nuovi avvii; non ferma
+da solo i worker attivi. Mock e UV locali seguono `skills/local-art/SKILL.md`.
+Il percorso opzionale Higgsfield via Claude è documentato in
+`docs/pipelines/claude-higgsfield.md`; la discovery ha rilevato `needs-auth`.
+Questo non blocca i mock locali. Il setup OAuth Claude in VS Code resta sospeso.
+Per corsi e guide usare `skills/course-lab/SKILL.md`: i laboratori dell'utente
+vivono in `projects/gamehub/2d/` e `projects/gamehub/3d/`.
+
+`mise run hub:check` valida catalogo, adattatori e contratti; `mise run hub:doctor`
 controlla i prerequisiti senza avviare MCP o verificare autenticazioni.
 `mise run hub:test` esegue i test degli strumenti del hub.
 

@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-21T23:37:20.684Z",
+  "algorithm": "sha256",
+  "purpose": "MCP catalog integration checkpoint; separate from the historical coordinator-reviewer evidence",
+  "files": [
+    {
+      "path": "docs/task-contract.md",
+      "sha256": "35300e3e8c076e15105d8b03f2b27de9602eddd883f726d21e8ee91235d26057"
+    },
+    {
+      "path": "schemas/task.schema.json",
+      "sha256": "8fec427097dd22dcfb227f52f953fd7ad090b91d63f541c718c41c9434130870"
+    },
+    {
+      "path": "schemas/handoff.schema.json",
+      "sha256": "0daa0b9e72771a3ebac93a7fc34e1bb6e79351586a4e622108b1580ae8850111"
+    },
+    {
+      "path": "templates/task/task.json",
+      "sha256": "df4da32311b3cc48240ee79fea47ec67a1b8f80cd1643866c94694e239a0c005"
+    },
+    {
+      "path": "templates/task/handoff.json",
+      "sha256": "66fe9801570af63f8f834d5645ccef06421f8f22a9c90daf2f39670df81de0e3"
+    },
+    {
+      "path": "skills/task-handoff/SKILL.md",
+      "sha256": "3f7876217bface04f11273cea11e2b5d470463853c72b9804da5a31d8f991d49"
+    },
+    {
+      "path": "agents/coordinator.md",
+      "sha256": "a54d31e1468fad9a75e4c917292ae390081c90dd1e558d18d13800cfb22bc683"
+    },
+    {
+      "path": "agents/independent-reviewer.md",
+      "sha256": "0dd12df717f247b31e612dcbe5b9e8f4e9fd9c8edf54cca4ef6a172031df78fe"
+    },
+    {
+      "path": ".github/agents/games-coordinator.agent.md",
+      "sha256": "0ce98251bb86c9c37ac7212b3cf2876a005764b20d8365e885af0f119bb71dbc"
+    },
+    {
+      "path": ".github/agents/games-reviewer.agent.md",
+      "sha256": "7dcfc19a36e7d0765eec3921d111fb048036844bc25941b88ca2841f04f525b4"
+    },
+    {
+      "path": "hub.json",
+      "sha256": "1a2f563816dc43f6c3da625f746bd4e236d2b4dd68c8ab7f2283dbce6ba41840"
+    },
+    {
+      "path": "schemas/hub.schema.json",
+      "sha256": "f08e2de76770c080d830345c73ccceed9fe8df4fd309fdce69d087b488d731e1"
+    },
+    {
+      "path": "scripts/hub.mjs",
+      "sha256": "d30bb560c7fd9b6233495bbf38ec911fd81a8f1d155887aff2eda7e4603cd271"
+    },
+    {
+      "path": "scripts/mcp-catalog.mjs",
+      "sha256": "35c50861659d2b7fc20143d391d3e4b15184aef6069aa41fa0e7f4fd1fdc4071"
+    },
+    {
+      "path": "scripts/memory-adapters.mjs",
+      "sha256": "2eae01456c1bdb643a92c5da60c933e58d63c3cd1ff74ae8574ceadf1f43b785"
+    },
+    {
+      "path": "scripts/setup.mjs",
+      "sha256": "0aced68ea30817113e987d60356eae1e8df036b8728ceb105770b82ff9fbeb61"
+    },
+    {
+      "path": "scripts/check-snapshot.mjs",
+      "sha256": "41fa65aef188e2ac8f2d234c58a841a841b1d069987075a95cf30f9a8ebae7b0"
+    },
+    {
+      "path": "tests/mcp-catalog.test.mjs",
+      "sha256": "fdafdbf5c3d8b7bb8d8c58c5bcedd272b470bd77b00d4eebc1d4fba6f485b1b1"
+    },
+    {
+      "path": "tests/memory-setup.test.mjs",
+      "sha256": "8dee9f1765c4a09ed044a4c4d7d8e22d287c053de3fad65f702dca2b5b79dc5f"
+    },
+    {
+      "path": "tests/hub.test.mjs",
+      "sha256": "53b168b479b90fcfe32b55903798bb11762c346c579fe6167eb8ce523adcf151"
+    },
+    {
+      "path": "tests/snapshot.test.mjs",
+      "sha256": "93aec44381bf1bc27708578d7d75e0f750b34d057f71adb7cee0faa4e52fc083"
+    },
+    {
+      "path": "tests/memory-mcp.test.mjs",
+      "sha256": "d4508a1a127e0e0e32c958d3317d70134b53ecfa46a4303a6e6e743d8d39c17d"
+    },
+    {
+      "path": "tests/memory-store.test.mjs",
+      "sha256": "209960e721af0d2af4be05b97a13c98b18c9bbfacc1248276099ef6e25212af3"
+    },
+    {
+      "path": "mcp/memory/server.mjs",
+      "sha256": "7b42b382fa0d08930c11dea3167df7bc1204dd1863a7017166d364e373e918e9"
+    },
+    {
+      "path": "mcp/memory/store.mjs",
+      "sha256": "943ae0c1ea495077b28991735942b21e1b61f15da2f7ed8bf84c36fd383f3c0e"
+    },
+    {
+      "path": "mcp/memory/options.mjs",
+      "sha256": "7e5c3cd8bf254a20442639e50daba3cac559ccb9d603a1e16aace222725931f8"
+    },
+    {
+      "path": "mcp/memory/cli.mjs",
+      "sha256": "b2bbf158776687fd56dd5437a708311f2b18f85747684e76eff79c103bbde139"
+    },
+    {
+      "path": "package.json",
+      "sha256": "d4a9b75a66b004fc4a04e8831f1928baec5f65afaa8e112d5594483e1a19ef22"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "9b857e2930c2dcbf6cb1b68990e480b2dcd394dbb86bf94e98c9d2758e718ad5"
+    },
+    {
+      "path": "mise.toml",
+      "sha256": "1137ca5fe3dfad1f22ca838ff7d744db494118f552ceafafb23e20a43118e563"
+    }
+  ]
+}

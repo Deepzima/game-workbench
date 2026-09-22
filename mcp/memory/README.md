@@ -20,7 +20,9 @@ mise run memory:search -- --query "memoria"
 ```
 
 `hub:setup` esegue `npm ci` dal lockfile, senza lifecycle script, e genera
-tre frammenti di configurazione in `.games/local/`. Il setup parte anche
+tre frammenti di configurazione in `.games/local/` dalla voce `games-memory`
+di `hub.json.mcp_servers`. `hub:sync` usa la stessa sorgente senza installare
+dipendenze. Il setup parte anche
 senza `node_modules` e non richiede chiavi API. Le dipendenze richiedono rete
 al primo download; il server avviato non installa pacchetti, non reindicizza
 e non usa un servizio remoto. `.env` serve soltanto alle integrazioni opzionali.
@@ -50,6 +52,43 @@ richiede Git. Senza `--apply` i frammenti restano consultabili in
 Installazione, registrazione e uso sono verifiche distinte. Il client può
 richiedere fiducia nel server o il riavvio della sessione per aggiornare gli
 strumenti. Gli account dei modelli restano gestiti da ciascun utente.
+
+## Catalogo e adattatori
+
+`hub.json.mcp_servers` è la fonte della definizione di `games-memory`.
+Per cambiare entrypoint, argomenti o ambiente si modifica il catalogo e si
+esegue `hub:sync`; questi dati non sono duplicati nel generatore. La voce
+attuale è:
+
+```json
+{
+  "id": "games-memory",
+  "transport": "stdio",
+  "runtime": "node",
+  "entrypoint": "mcp/memory/server.mjs",
+  "args": ["--hub-root", { "root": "hub" }],
+  "project_args": ["--project-root", { "root": "project" }],
+  "env": { "MISE_AUTO_INSTALL": "false" }
+}
+```
+
+Lo schema v1 supporta server stdio eseguiti con Node e un entrypoint locale
+JavaScript dentro `mcp/`. Gli argomenti possono essere stringhe portabili o
+riferimenti strutturati alla root. `args` ammette `{ "root": "hub" }`;
+`project_args`, opzionale, ammette anche `{ "root": "project" }` ed è usato
+soltanto quando viene selezionato un checkout di progetto. `env` contiene
+valori espliciti non segreti; credenziali e percorsi macchina non appartengono
+al catalogo.
+
+Il generatore valida la sezione MCP e i suoi entrypoint prima di scrivere
+configurazioni. Una voce `games-memory` assente o non valida interrompe
+l'operazione. Preview e applicazione usano la stessa lettura del catalogo.
+Gli adattatori risolvono le root per il client scelto e avviano il server con
+`mise exec --no-deps` e `MISE_AUTO_INSTALL=false`, separando l'avvio dal setup.
+
+Questa milestone distribuisce soltanto `games-memory`. Gli altri MCP già
+presenti nei client vengono preservati: non sono stati migrati al catalogo
+né verificati da questa generazione.
 
 ## Aggiungere una memoria
 
@@ -149,6 +188,19 @@ delle chat, non sincronizza database fra macchine e non attiva hook.
 obsoleta, transazioni, percorsi, adattatori e chiamate reali dei tre strumenti
 MCP tramite stdio. I test usano directory temporanee con spazi e checkout
 separati; non dipendono dai giochi o da credenziali.
+La validazione del catalogo e le chiamate stdio non dimostrano che ogni
+harness carichi il server nella propria interfaccia. Discovery e uso nei
+client, autenticazione dei modelli e operazioni nell'engine richiedono
+prove separate.
+
+Il 22 settembre 2026 l'utente ha confermato una verifica funzionale minima
+nell'istanza VS Code Games: stato `ready` con due documenti, ricerca di
+`catalogo` con risultato `memory-model` (`verified`, aggiornato al
+2026-09-22) e lettura integrale riuscita, senza terminale. L'utente riferisce
+anche di vedere le chiamate agli strumenti nel debug della conversazione.
+Questa evidenza deriva dal suo resoconto, non da un'ispezione autonoma dei
+log: vedi [esito VS Code](../../docs/verification/mcp-catalog/vscode-result.md).
+Le TUI e le operazioni nell'engine non sono verificate da questa prova.
 
 La piattaforma verificata in questa milestone è macOS arm64. Linux e
 Windows richiedono ancora esecuzioni su host reali prima di dichiarare il

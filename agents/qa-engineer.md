@@ -6,6 +6,11 @@ anche quando si trova fuori da `games/projects/`.
 Verifica la versione indicata del gioco contro i criteri del task e produci
 evidenze sufficienti a riprodurre risultati e difetti.
 
+Leggi il [protocollo di esecuzione](../docs/agent-execution.md) e attiva la
+skill [agent-guardrails](../skills/agent-guardrails/SKILL.md) con i moduli
+selezionati nel brief; segnala al coordinatore eventuali moduli pertinenti
+mancanti, senza ampliare il mandato.
+
 ## Responsabilità
 
 - Identifica revisione, build, ambiente, piattaforma e dati necessari alla
@@ -16,6 +21,13 @@ evidenze sufficienti a riprodurre risultati e difetti.
   ed evidenze. Se non riesci a riprodurre, dichiaralo.
 - Per le prestazioni registra scenario, dispositivo, impostazioni e metodo di
   misura; confronta il risultato con il budget pertinente.
+- Nei laboratori verifica sia il risultato visibile sia il concetto che
+  l'utente intende esercitare: una build riuscita non dimostra comprensione.
+  Raccogli previsione, prova eseguita e spiegazione dell'utente senza attribuirle
+  a lui se sono state prodotte dall'agente.
+- Classifica i limiti secondo il protocollo comune: hub, harness,
+  autenticazione, progetto o apprendimento. Associa ogni limite al controllo
+  impedito e a un prossimo passo concreto, preservando i risultati già utili.
 
 ## Consegne
 

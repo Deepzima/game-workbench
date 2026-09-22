@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import jsonc from 'jsonc-parser';
 import TOML from '@iarna/toml';
+import { loadMcpCatalog, renderMcpEntry } from './mcp-catalog.mjs';
 
 export const HUB_ROOT = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
 export const CLIENTS = ['vscode', 'claude', 'codex'];
@@ -124,17 +125,16 @@ function assertOwned(current, desired, record) {
   if (!record || record.sha256 !== hash(current)) fail('games-memory esiste con una configurazione diversa non gestita da questo setup. Nessuna sostituzione eseguita.');
 }
 
-export function memoryEntry(hubRoot, projectRoot, client) {
+async function memoryDefinition(hubRoot) {
+  const catalog = await loadMcpCatalog({ root: hubRoot });
+  const definition = catalog.find(server => server.id === NAME);
+  if (!definition) fail('hub.json: games-memory non presente nel catalogo MCP. Nessuna configurazione generata.');
+  return definition;
+}
+
+export async function memoryEntry(hubRoot, projectRoot, client) {
   if (!CLIENTS.includes(client)) fail('Client non valido: usare vscode, claude o codex.');
-  const portable = client === 'vscode' && !projectRoot;
-  const serverRoot = portable ? '${workspaceFolder}' : hubRoot;
-  const entry = {
-    command: 'mise',
-    args: ['-C', serverRoot, 'exec', '--no-deps', '--', 'node', portable ? 'mcp/memory/server.mjs' : path.join(hubRoot, 'mcp/memory/server.mjs'), '--hub-root', serverRoot,
-      ...(projectRoot ? ['--project-root', projectRoot] : [])],
-    env: { MISE_AUTO_INSTALL: 'false' },
-  };
-  return client === 'vscode' ? { type: 'stdio', ...entry } : entry;
+  return renderMcpEntry(await memoryDefinition(hubRoot), { hubRoot, projectRoot, client });
 }
 
 function snippet(entry, client) {
@@ -249,12 +249,16 @@ export async function configureMemory({ hubRoot = HUB_ROOT, projectRoot, client,
   if (project === hub) fail('Hub e progetto devono essere checkout distinti. Omettere --project-root per la memoria del hub.');
   const root = project ?? hub;
   const clients = client ? [client] : CLIENTS;
+  // Validate once and render all outputs before any writes. Applying a client
+  // must use the same catalog snapshot as the preview generated in this run.
+  const definition = await memoryDefinition(hub);
+  const entries = new Map(clients.map(selected => [selected, renderMcpEntry(definition, { hubRoot: hub, projectRoot: project, client: selected })]));
   const snippetPaths = clients.map(selected => `${LOCAL}/games-memory.${selected}.${selected === 'codex' ? 'toml' : 'json'}`);
   await protectLocalFiles(root, [...snippetPaths, ...(apply ? [STATE] : [])]);
   const generated = [];
   for (const selected of clients) {
     const relative = `${LOCAL}/games-memory.${selected}.${selected === 'codex' ? 'toml' : 'json'}`;
-    await writeLocal(root, relative, snippet(memoryEntry(hub, project, selected), selected));
+    await writeLocal(root, relative, snippet(entries.get(selected), selected));
     generated.push(path.join(root, relative));
   }
   let changed = false;
@@ -263,7 +267,7 @@ export async function configureMemory({ hubRoot = HUB_ROOT, projectRoot, client,
       fail(`La configurazione ${TARGETS[client]} contiene percorsi locali: --apply richiede un file ignorato da Git e non tracciato. Usare lo snippet generato o predisporre il checkout.`);
     }
     const state = await readState(root);
-    const entry = memoryEntry(hub, project, client);
+    const entry = entries.get(client);
     changed = client === 'codex' ? await applyToml(root, entry, state) : await applyJson(root, client, entry, state);
     state.clients[client] = { sha256: hash(entry) };
     await writeLocal(root, STATE, `${JSON.stringify(state, null, 2)}\n`);

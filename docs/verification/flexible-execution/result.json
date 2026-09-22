@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-22T12:18:32.189023+00:00",
+  "scope": "Local hub checks; no model inference, native VS Code discovery or course/asset production in this milestone",
+  "catalog": {
+    "roles": 7,
+    "skills": 6,
+    "guardrails": 6,
+    "contracts": 2,
+    "mcp_servers": 1,
+    "workflows": 1,
+    "state": "passed"
+  },
+  "tests": {
+    "command": "mise run hub:test",
+    "tests": 108,
+    "pass": 108,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "skill_validation": {
+    "passed": 6
+  },
+  "adapter_frontmatter": {
+    "passed": 7,
+    "native_discovery": "pending"
+  },
+  "independent_reviews": [
+    {
+      "reviewer": "/root/hub_codex_compat",
+      "scope": "workflow controller human controls",
+      "findings_fixed": [
+        "Approved ancestor report drift",
+        "Inherited acceptance property for constructor"
+      ],
+      "followup": "22/22 tests and both original reproductions passed; no further blocking findings"
+    },
+    {
+      "reviewer": "/root/workflow_review",
+      "scope": "execution policy, guardrails, game-feature guidance, OpenCode launcher and delegate-code",
+      "result": "No actionable findings; 8/8 launcher tests passed",
+      "exclusion": "Roles authored by this reviewer excluded"
+    }
+  ],
+  "backward_compatibility": {
+    "task_id": "workflow-proof-001",
+    "status": "completed",
+    "mode": "proof",
+    "input_changes": [],
+    "run_modified": false
+  },
+  "memory": {
+    "state": "ready",
+    "documents": 4,
+    "search": "esecutori returned new execution note and workflow note"
+  },
+  "not_verified": [
+    "Actual OpenCode model task and provider authentication",
+    "Discovery and execution of new VS Code adapters/skills",
+    "Local mock/UV production and engine validation",
+    "Course lesson content, practical learning steps and playtest",
+    "Windows launcher behavior"
+  ]
+}
